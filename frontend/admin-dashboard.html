@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Dashboard - User </title>
+</head>
+<body>
+
+    <header class="topbar">
+        <img src="assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="admin-dashboard.html" class="active">Dashboard</a>
+                <a href="#">Create Session</a>
+            </nav>
+            <a href="login.html" class="logout">Logout</a>
+        </aside>
+
+        <main class="dashboard-content">
+            <h1>Welcome, Admin</h1>
+
+            <div class="cards-grid">
+<!--The a tag below has the top card - Create session card-->
+                <a href="create-session.html" class="card-full" >
+                    <h2>Create Session</h2>
+                    <p>Generate a new interview link</p>
+                </a>
+<!-- The tags below have the -reports and last interview -->
+                <a href="reports.html" class="card">
+                    <h2>Interview Reports</h2>
+                    <p>View past interview reports</p>
+                </a>
+                    
+                <a href="last-interview.html" class="card">
+                    <h2>Last Interview</h2>
+                    <p>Summary of the most recent interview</p>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

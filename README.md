@@ -1,61 +1,22 @@
-# Interview-Process-Management
+# Interview Process Management
 
-## 4 Roles:
-1. **Admin** — Coordinates everyone, creates sessions, creates Zoom links, assigns interviewers, views reports, exports to spreadsheet
-2. **ICT** — Manages user accounts (create, edit, delete, assign roles)
-3. **HR** — Views all sessions, views reports, schedules interviews, scores applicants, manages applicants
-4. **Job Applicant** — Creates profile, applies for jobs, views application status only
+A web-based system for managing interview sessions, scoring applicants, and tracking recruitment workflows. Built with PHP (XAMPP) and vanilla HTML/CSS.
 
-## Key Flows:
-1. **Applicant applies** → **Admin creates session** → **Interviewers score** → **Reports generated**
-2. **Admin creates session**: pastes Zoom link → picks interviewers → system sends scoring links
-3. **Interviewers assigned manually** by admin
+## System Overview
 
-## Pages needed:
+### User Roles
 
-### Admin Dashboard:
-- View all sessions/reports
-- Create session (with Zoom link, candidate info, select interviewers)
-- Export reports to spreadsheet
-- View last interview
-
-### ICT Dashboard:
-- Manage user accounts (CRUD)
-- Assign roles
-
-### HR Dashboard:
-- View all sessions
-- View reports
-- Schedule interviews
-- Score applicants
-- Manage applicants
-
-### Job Applicant Dashboard:
-- View profile (readonly?)
-- View application status
-
-### Shared/Standalone pages:
-- Interview scoring page (link-based, anonymous)
-- Login pageNow let me design the full plan with the updated schema and page structure.
-
-Now I have a complete picture. Here's the revised comprehensive plan:
-
----
-
-## Revised System Architecture
-
-### 4 User Roles
-
-| Role | Dashboard Purpose |
-|------|-------------------|
-| **Admin** | Create sessions, Zoom links, assign interviewers, view reports, export to spreadsheet |
+| Role | Responsibilities |
+|------|------------------|
+| **Admin** | Create sessions, generate Zoom links, assign interviewers, view/export reports |
 | **ICT** | Manage user accounts (CRUD), assign roles |
 | **HR** | View all sessions, view reports, schedule interviews, score applicants, manage applicants |
-| **Job Applicant** | View profile, view application status (readonly) |
+| **Job Applicant** | Create profile, apply for jobs, view application status |
 
-### Flow
+### Core Flow
+
 ```
-Applicant creates profile & applies
+Applicant registers & creates profile
   → Admin creates interview session (pastes Zoom link, selects candidate & interviewers)
   → System generates scoring links for assigned interviewers
   → Interviewers join Zoom, fill assessment via scoring link
@@ -65,149 +26,169 @@ Applicant creates profile & applies
 
 ---
 
-## Database Schema (Revised — 7 tables)
+## Tech Stack
 
-**1. `departments`**
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `name` | VARCHAR(100) |
-
-**2. `users`**
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `name` | VARCHAR(100) |
-| `email` | VARCHAR(150) UNIQUE |
-| `password` | VARCHAR(255) |
-| `role` | ENUM('admin','ict','hr','applicant') |
-| `department_id` | INT FK → departments.id |
-| `created_at` | TIMESTAMP |
-
-**3. `applicants`** (extended profile for job applicants)
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `user_id` | INT FK → users.id |
-| `phone` | VARCHAR(20) |
-| `resume_link` | VARCHAR(255) |
-| `position_applied` | VARCHAR(150) |
-| `status` | ENUM('applied','reviewing','interviewed','hired','rejected') |
-
-**4. `sessions`** (interview sessions created by admin)
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `candidate_name` | VARCHAR(150) |
-| `candidate_email` | VARCHAR(150) |
-| `position` | VARCHAR(150) |
-| `zoom_link` | VARCHAR(255) |
-| `created_by` | INT FK → users.id |
-| `department_id` | INT FK → departments.id |
-| `status` | ENUM('pending','active','completed') |
-| `scheduled_date` | DATETIME |
-| `created_at` | TIMESTAMP |
-
-**5. `session_interviewers`** (assigned interviewers per session)
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `session_id` | INT FK → sessions.id |
-| `user_id` | INT FK → users.id |
-| `unique_token` | VARCHAR(64) UNIQUE |
-| `has_submitted` | BOOLEAN DEFAULT FALSE |
-| `created_at` | TIMESTAMP |
-
-**6. `scoring_criteria`** (predefined — seeded)
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `name` | VARCHAR(100) |
-| `max_score` | INT DEFAULT 10 |
-
-**7. `scores`** (submitted scores)
-| Column | Type |
-|--------|------|
-| `id` | INT PK AUTO_INCREMENT |
-| `session_interviewer_id` | INT FK → session_interviewers.id |
-| `criteria_id` | INT FK → scoring_criteria.id |
-| `score` | INT |
-| `submitted_at` | TIMESTAMP |
+- **Backend:** PHP (XAMPP — Apache + MySQL)
+- **Frontend:** Vanilla HTML/CSS — no frameworks, no JS libraries
+- **Database:** MySQL
+- **Server:** XAMPP Apache required
 
 ---
 
-## Pages to Build
+## Project Structure
 
-### Login
-| File | Purpose |
-|------|---------|
-| `login.html` | **Redesign** — role-aware (redirects to correct dashboard after login) |
-
-### Admin Dashboard
-| File | Purpose |
-|------|---------|
-| `admin-dashboard.html` | Cards: Create Session, View Reports, Departments |
-| `create-session.html` | Form: candidate info, Zoom link, select interviewers, send scoring links |
-| `admin-reports.html` | Table of all sessions/reports + **Export to Spreadsheet** button |
-
-### ICT Dashboard
-| File | Purpose |
-|------|---------|
-| `ict-dashboard.html` | Cards: Manage Users, Departments |
-| `manage-users.html` | Table of all users + Add/Edit/Delete user forms |
-
-### HR Dashboard
-| File | Purpose |
-|------|---------|
-| `hr-dashboard.html` | Cards: All Sessions, Reports, Manage Applicants, Score Applicants |
-| `hr-sessions.html` | Table of all sessions with status |
-| `hr-reports.html` | View reports (read-only) |
-| `manage-applicants.html` | Table of applicants + status management |
-
-### Applicant Dashboard
-| File | Purpose |
-|------|---------|
-| `applicant-dashboard.html` | Profile view (readonly) + application status |
-
-### Standalone Pages
-| File | Purpose |
-|------|---------|
-| `interview-score.html` | Anonymous scoring form (accessed via unique token link) |
+```
+Interview-Process-Management/
+├── frontend/
+│   ├── style.css                    ← All shared styles
+│   ├── login.html                   ← Login page (wired to backend)
+│   ├── register.html                ← Applicant registration (wired to backend)
+│   ├── assets/
+│   │   └── NCIA-Logo-2022.png
+│   └── dashboards/
+│       ├── admin-dashboard.html     ← Admin landing page
+│       ├── ict-dashboard.html       ← ICT landing page
+│       ├── hr-dashboard.html        ← HR landing page
+│       └── applicant-dashboard.html ← Applicant landing page
+│
+├── backend/
+│   ├── config/
+│   │   └── database.php             ← PDO connection class
+│   ├── database/
+│   │   └── schema.sql               ← Database schema (4 tables)
+│   ├── login-validation.php         ← Auth + role-based redirects
+│   ├── register-validation.php      ← Applicant registration logic
+│   └── seed-admin.php               ← Seeds default admin account
+│
+├── README.md
+├── AGENTS.md                        ← Agent guide (not pushed to remote)
+└── .gitignore
+```
 
 ---
 
-## Files to Create
+## Database Schema
 
-### Backend
-1. `backend/database/schema.sql` — Full schema + seed data
-2. `backend/config/database.php` — PDO connection
-3. `backend/login-validation.php` — Auth logic
+**Database name:** `interview_management_db`
 
-### Frontend (HTML — you handle CSS)
-4. `login.html` — Redesign for role-based redirect
-5. `admin-dashboard.html` — Redesign for new cards
-6. `create-session.html` — Session creation form
-7. `admin-reports.html` — Reports table + export
-8. `ict-dashboard.html` — ICT landing page
-9. `manage-users.html` — User CRUD table
-10. `hr-dashboard.html` — HR landing page
-11. `hr-sessions.html` — All sessions table
-12. `hr-reports.html` — Reports view
-13. `manage-applicants.html` — Applicant management
-14. `applicant-dashboard.html` — Applicant profile view
-15. `interview-score.html` — Anonymous scoring form
+### Tables
+
+**1. `employees`** — Staff users (admin, ICT, HR)
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | INT PK AUTO_INCREMENT | |
+| `name` | VARCHAR(100) NOT NULL | |
+| `department` | VARCHAR(50) | |
+| `role` | VARCHAR(50) | admin, ict, hr |
+| `email` | VARCHAR(150) UNIQUE NOT NULL | |
+| `password` | VARCHAR(255) NOT NULL | bcrypt hashed |
+| `created_at` | TIMESTAMP DEFAULT CURRENT_TIMESTAMP | |
+
+**2. `applicants`** — Job applicants
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | INT PK AUTO_INCREMENT | |
+| `name` | VARCHAR(100) NOT NULL | |
+| `email` | VARCHAR(150) UNIQUE NOT NULL | |
+| `phone` | VARCHAR(20) | |
+| `password` | VARCHAR(255) NOT NULL | bcrypt hashed |
+| `resume_link` | VARCHAR(255) | |
+| `position` | VARCHAR(150) | |
+| `created_at` | TIMESTAMP DEFAULT CURRENT_TIMESTAMP | |
+
+**3. `sessions`** — Interview sessions
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | INT PK AUTO_INCREMENT | |
+| `applicant_id` | INT NOT NULL | FK → applicants(id) ON DELETE CASCADE |
+| `zoom_link` | VARCHAR(255) | |
+| `status` | ENUM('pending','active','completed') | Default: pending |
+| `scheduled_date` | DATETIME | |
+| `created_at` | TIMESTAMP DEFAULT CURRENT_TIMESTAMP | |
+
+**4. `scores`** — Interview scores
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | INT PK AUTO_INCREMENT | |
+| `session_id` | INT NOT NULL | FK → sessions(id) ON DELETE CASCADE |
+| `applicant_name` | VARCHAR(100) NOT NULL | |
+| `technical_skills` | INT DEFAULT 0 | Score 0–10 |
+| `communication` | INT DEFAULT 0 | Score 0–10 |
+| `confidence` | INT DEFAULT 0 | Score 0–10 |
+| `work_ethic` | INT DEFAULT 0 | Score 0–10 |
+| `team_fit` | INT DEFAULT 0 | Score 0–10 |
+| `total` | INT DEFAULT 0 | Sum of all criteria |
+| `submitted_at` | TIMESTAMP DEFAULT CURRENT_TIMESTAMP | |
+
+### Default Admin Account
+
+Created via `backend/seed-admin.php`:
+- **Email:** admin@ncia.com
+- **Password:** admin123
 
 ---
 
-### Build Order
-| Phase | What | Why |
-|-------|------|-----|
-| **1** | Database schema + DB config | Foundation for everything |
-| **2** | Login system (redesign) | Auth gate for all roles |
-| **3** | Admin pages (dashboard, create session, reports) | Core functionality |
-| **4** | ICT pages (manage users) | User management needed before HR/Applicant flows |
-| **5** | HR pages (sessions, reports, applicants) | Depends on sessions existing |
-| **6** | Applicant dashboard | Simplest — mostly readonly |
-| **7** | Interview scoring page | Standalone, token-based |
+## Current Status
 
-That's **15 files** total (3 backend + 12 frontend). Would you like to adjust the scope or proceed with this plan?
+### Completed
+
+| Component | Status | Details |
+|-----------|--------|---------|
+| Database schema | ✅ Done | 4 tables in `backend/database/schema.sql` |
+| DB connection | ✅ Done | PDO class in `backend/config/database.php` |
+| Login system | ✅ Done | Role-based auth, session handling, redirects |
+| Registration | ✅ Done | Applicant signup with validation |
+| Login page | ✅ Done | Wired to backend, error/success messages |
+| Register page | ✅ Done | Wired to backend, error messages |
+| Admin dashboard | ✅ Done | 4 cards: Create Session, Reports, Last Interview, Departments |
+| ICT dashboard | ✅ Done | 2 cards: Manage Users, Departments |
+| HR dashboard | ✅ Done | 4 cards: All Sessions, Reports, Manage Applicants, Score Applicants |
+| Applicant dashboard | ✅ Done | 3 cards: Join Session, My Profile, Application Status |
+| CSS design system | ✅ Done | 265 lines — blue/orange/white theme, cards, sidebar, topbar |
+
+### Not Started
+
+| Component | Priority |
+|-----------|----------|
+| `create-session.html` | High — core admin feature |
+| `reports.html` | High — used by admin + HR |
+| `manage-users.html` | High — ICT core feature |
+| `hr-sessions.html` | Medium |
+| `manage-applicants.html` | Medium |
+| `score-applicants.html` | Medium |
+| `departments.html` | Medium |
+| `profile.html` | Low — applicant readonly |
+| `application-status.html` | Low — applicant readonly |
+| `interview-score.html` | Low — standalone scoring form |
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+- XAMPP (Apache + MySQL running)
+- PHP 7.4+
+- MySQL 5.7+
+
+### Database Setup
+1. Open phpMyAdmin (`http://localhost/phpmyadmin`)
+2. Import `backend/database/schema.sql`
+3. Run `backend/seed-admin.php` to create the default admin account (`http://localhost/Interview-Process-Management/backend/seed-admin.php`)
+
+### Access
+- **Login:** `http://localhost/Interview-Process-Management/frontend/login.html`
+- **Register:** `http://localhost/Interview-Process-Management/frontend/register.html`
+
+---
+
+## Build Order
+
+| Phase | Status |
+|-------|--------|
+| 1. Database schema + DB config | ✅ Done |
+| 2. Login system | ✅ Done |
+| 3. Admin pages (sub-pages) | 🔲 Not started |
+| 4. ICT pages | 🔲 Not started |
+| 5. HR pages | 🔲 Not started |
+| 6. Applicant sub-pages | 🔲 Not started |
+| 7. Interview scoring page | 🔲 Not started |

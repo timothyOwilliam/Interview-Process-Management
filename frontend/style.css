@@ -45,7 +45,8 @@ body {
     color: var(--text-color);
 }
 
-.login-details input {
+.login-details input,
+.login-details select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ccc;
@@ -67,6 +68,34 @@ body {
 
 .sign-in-button:hover {
     opacity: 0.9;
+}
+
+/* ========================
+   FORM EXTRAS
+   ======================== */
+
+.form-title {
+    color: var(--text-color);
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.form-link {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.form-link a {
+    color: var(--third-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-link a:hover {
+    text-decoration: underline;
 }
 
 /* ========================
@@ -228,4 +257,9 @@ body {
 
 .join-btn:hover {
     opacity: 0.9;
+}
+/* The join button is disabled when there is no session created, it will be enabled when there is a session */
+.join-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }

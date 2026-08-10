@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     applicant_id INT NOT NULL,
     zoom_link VARCHAR(255),
-    status ENUM('pending', 'active', 'completed') DEFAULT 'pending',
     scheduled_date DATETIME,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (applicant_id) REFERENCES applicants(id) ON DELETE CASCADE

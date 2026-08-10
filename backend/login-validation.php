@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //Redirect the user to the appropriate dashboard when depending on the role
             switch ($user['role']) {
                 case 'admin':
-                    header("Location: ../frontend/dashboards/admin-dashboard.html");
+                    header("Location: ../frontend/admin-pages/admin-dashboard.html");
                     break;
                 case 'ict':
                     header("Location: ../frontend/dashboards/ict-dashboard.html");

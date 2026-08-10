@@ -13,14 +13,16 @@
 
 body {
     min-height: 100vh;
+    background-color: var(--primary-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.login-page {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1.5rem;
-    background-color: var(--primary-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
 }
 
 
@@ -52,6 +54,13 @@ body {
     border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 1rem;
+    color: #333;
+    background-color: white;
+}
+
+.login-details select option {
+    color: #fffefe;
+    background-color: rgb(0, 0, 0);
 }
 
 .sign-in-button {
@@ -262,4 +271,78 @@ body {
 .join-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+/* ========================
+   FORM MESSAGES
+   ======================== */
+
+.error-message,
+.success-message {
+    display: none;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.success-message {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+/* ========================
+   DASHBOARD FORM OVERRIDES
+   ======================== */
+
+.dashboard-content .login-section {
+    max-width: 500px;
+    width: 100%;
+}
+
+/* ========================
+   SUB-PAGE LAYOUT
+   ======================== */
+
+.page-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.page-content h1 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.back-link {
+    align-self: flex-start;
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--third-color);
+}
+
+.page-content .login-section {
+    max-width: 75%;
+    width: 100%;
+    margin: 0 auto;
 }

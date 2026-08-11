@@ -50,7 +50,7 @@ if ($stmt -> rowCount() > 0){
     </header>
 
     <main class="page-content">
-        <a href="admin-dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+        <a href="admin-dashboard.php" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>Create Interview Session</h1>
 

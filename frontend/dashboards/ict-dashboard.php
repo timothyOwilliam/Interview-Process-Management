@@ -15,22 +15,22 @@
     <div class="dashboard-layout">
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="ict-dashboard.html" class="active">Dashboard</a>
-                <a href="manage-users.html">Manage Users</a>
+                <a href="ict-dashboard.php" class="active">Dashboard</a>
+                <a href="manage-users.php">Manage Users</a>
             </nav>
-            <a href="../login.html" class="logout">Logout</a>
+            <a href="../login.php" class="logout">Logout</a>
         </aside>
 
         <main class="dashboard-content">
             <h1>Welcome, ICT</h1>
 <!-- Cards for accessing manage users and departments for ICT department -->
             <div class="cards-grid">
-                <a href="manage-users.html" class="card">
+                <a href="manage-users.php" class="card">
                     <h2>Manage Users</h2>
                     <p>Create, edit, or delete user accounts</p>
                 </a>
 
-                <a href="departments.html" class="card">
+                <a href="departments.php" class="card">
                     <h2>Departments</h2>
                     <p>Manage departments and roles</p>
                 </a>

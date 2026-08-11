@@ -15,11 +15,11 @@
     <div class="dashboard-layout">
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="admin-dashboard.html" class="active">Dashboard</a>
-                <a href="create-session.html">Create Session</a>
-                <a href="manage-applicants.html">Manage Applicants</a>
+                <a href="admin-dashboard.php" class="active">Dashboard</a>
+                <a href="create-session.php">Create Session</a>
+                <a href="manage-applicants.php">Manage Applicants</a>
             </nav>
-            <a href="../login.html" class="logout">Logout</a>
+            <a href="../login.php" class="logout">Logout</a>
         </aside>
 
         <main class="dashboard-content">
@@ -32,17 +32,17 @@
                     <p>Generate a new interview link</p>
                 </a>
 <!-- The tags below have the -reports and last interview -->
-                <a href="reports.html" class="card">
+                <a href="reports.php" class="card">
                     <h2>Interview Reports</h2>
                     <p>View past interview reports</p>
                 </a>
                     
-                <a href="sessions.html" class="card">
+                <a href="sessions.php" class="card">
                     <h2>Interview Sessions</h2>
                     <p>List of all the sessions created </p>
                 </a>
-<!-- The tag below is for departments.html -->
-                <a href="departments.html" class="card">
+<!-- The tag below is for departments.php -->
+                <a href="departments.php" class="card">
                     <h2>Departments</h2>
                     <p>Manage departments and roles</p>
                 </a>

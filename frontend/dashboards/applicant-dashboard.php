@@ -34,12 +34,12 @@
                     <button class="join-btn" disabled>Join</button>
                 </a>
 
-                <a href="profile.html" class="card">
+                <a href="profile.php" class="card">
                     <h2>My Profile</h2>
                     <p>View your personal information</p>
                 </a>
 
-                <a href="application-status.html" class="card">
+                <a href="application-status.php" class="card">
                     <h2>Application Status</h2>
                     <p>Track your application progress</p>
                 </a>

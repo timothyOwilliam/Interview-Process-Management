@@ -15,11 +15,11 @@
     <div class="dashboard-layout">
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="hr-dashboard.html" class="active">Dashboard</a>
-                <a href="hr-sessions.html">All Sessions</a>
-                <a href="reports.html">Reports</a>
-                <a href="manage-applicants.html">Manage Applicants</a>
-                <a href="score-applicants.html">Score Applicants</a>
+                <a href="hr-dashboard.php" class="active">Dashboard</a>
+                <a href="hr-sessions.php">All Sessions</a>
+                <a href="reports.php">Reports</a>
+                <a href="manage-applicants.php">Manage Applicants</a>
+                <a href="score-applicants.php">Score Applicants</a>
             </nav>
             <a href="../login.html" class="logout">Logout</a>
         </aside>
@@ -28,22 +28,22 @@
             <h1>Welcome, HR</h1>
 
             <div class="cards-grid">
-                <a href="hr-sessions.html" class="card">
+                <a href="hr-sessions.php" class="card">
                     <h2>All Sessions</h2>
                     <p>View all interview sessions</p>
                 </a>
 
-                <a href="reports.html" class="card">
+                <a href="reports.php" class="card">
                     <h2>Interview Reports</h2>
                     <p>View interview reports</p>
                 </a>
 
-                <a href="manage-applicants.html" class="card">
+                <a href="manage-applicants.php" class="card">
                     <h2>Manage Applicants</h2>
                     <p>View and manage applicant status</p>
                 </a>
 
-                <a href="score-applicants.html" class="card">
+                <a href="score-applicants.php" class="card">
                     <h2>Score Applicants</h2>
                     <p>Score applicants after interviews</p>
                 </a>

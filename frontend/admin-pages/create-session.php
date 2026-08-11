@@ -72,8 +72,8 @@ if ($stmt -> rowCount() > 0){
                 <label for="zoom_link">Zoom Link</label>
                 <input type="url" name="zoom_link" id="zoom_link" placeholder="https://zoom.us/j/..." required>
 
-                <label for="scheduled_date">Scheduled Date &amp; Time</label>
-                <input type="datetime-local" name="scheduled_date" id="scheduled_date" required>
+                <label for="date_and_time">Scheduled Date &amp; Time</label>
+                <input type="datetime-local" name="date_and_time" id="date_and_time" required>
 
                 <button type="submit" class="sign-in-button">Create Session</button>
             </form>

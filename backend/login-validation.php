@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = trim($_POST['password']);
 
     if (empty($email) || empty($password)) {
-        header("Location: ../frontend/login.html?error=Please+fill+in+all+fields");
+        header("Location: ../frontend/login.php?error=Please+fill+in+all+fields");
         exit();
     }
 

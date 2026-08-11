@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //Confirms how many rows were affected by the previous query
 // if true it means the email exists 
     if ($stmt->rowCount() > 0) {
-        header("Location: ../frontend/register.html?error=Email+already+registered");
+        header("Location: ../frontend/register.php?error=Email+already+registered");
         exit(); //stop the whole process/script
     }
 
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':phone', $phone);
     $stmt->bindParam(':password', $hashed_password);
-
+        
 
 //the $stmt->execute will execute the query and give success mesage if not an error is given and an exit is done.
     if ($stmt->execute()) {

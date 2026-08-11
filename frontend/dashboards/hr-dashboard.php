@@ -21,7 +21,7 @@
                 <a href="manage-applicants.php">Manage Applicants</a>
                 <a href="score-applicants.php">Score Applicants</a>
             </nav>
-            <a href="../login.html" class="logout">Logout</a>
+            <a href="../login.php" class="logout">Logout</a>
         </aside>
 
         <main class="dashboard-content">

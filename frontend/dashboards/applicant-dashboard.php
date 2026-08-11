@@ -15,11 +15,11 @@
     <div class="dashboard-layout">
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="applicant-dashboard.html" class="active">Dashboard</a>
-                <a href="profile.html">My Profile</a>
-                <a href="application-status.html">Application Status</a>
+                <a href="applicant-dashboard.php" class="active">Dashboard</a>
+                <a href="profile.php">My Profile</a>
+                <a href="application-status.php">Application Status</a>
             </nav>
-            <a href="../login.html" class="logout">Logout</a>
+            <a href="../login.php" class="logout">Logout</a>
         </aside>
 
         <main class="dashboard-content">

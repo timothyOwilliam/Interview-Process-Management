@@ -346,3 +346,66 @@ body {
     width: 100%;
     margin: 0 auto;
 }
+
+/* ========================
+   TABLE STYLES
+   ======================== */
+
+.table-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.85rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.data-table th {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.table-link:hover {
+    color: var(--third-color);
+    text-decoration: underline;
+}
+
+.text-muted {
+    color: #999;
+    font-style: italic;
+}
+
+.empty-state {
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+    margin-top: 2rem;
+}

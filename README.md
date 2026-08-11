@@ -40,28 +40,31 @@ Applicant registers & creates profile
 ```
 Interview-Process-Management/
 ├── frontend/
-│   ├── style.css                    ← All shared styles
-│   ├── login.html                   ← Login page (wired to backend)
-│   ├── register.html                ← Applicant registration (wired to backend)
+│   ├── style.css                          ← 348 lines — all shared styles
+│   ├── login.html                         ← wired to backend/login-validation.php
+│   ├── register.html                      ← wired to backend/register-validation.php
 │   ├── assets/
 │   │   └── NCIA-Logo-2022.png
-│   └── dashboards/
-│       ├── admin-dashboard.html     ← Admin landing page
-│       ├── ict-dashboard.html       ← ICT landing page
-│       ├── hr-dashboard.html        ← HR landing page
-│       └── applicant-dashboard.html ← Applicant landing page
+│   ├── dashboards/
+│   │   ├── ict-dashboard.html             ← ICT landing page
+│   │   ├── hr-dashboard.html              ← HR landing page
+│   │   └── applicant-dashboard.html       ← Applicant landing page
+│   └── admin-pages/
+│       ├── admin-dashboard.html           ← Admin landing page
+│       └── create-session.php             ← PHP form (fetches applicants from DB)
 │
 ├── backend/
 │   ├── config/
-│   │   └── database.php             ← PDO connection class
+│   │   └── database.php                   ← PDO connection class
 │   ├── database/
-│   │   └── schema.sql               ← Database schema (4 tables)
-│   ├── login-validation.php         ← Auth + role-based redirects
-│   ├── register-validation.php      ← Applicant registration logic
-│   └── seed-admin.php               ← Seeds default admin account
+│   │   └── schema.sql                     ← 4 tables: employees, applicants, sessions, scores
+│   ├── login-validation.php               ← auth + role-based redirects
+│   ├── register-validation.php            ← applicant registration logic
+│   ├── seed-admin.php                     ← seeds default admin account
+│   └── create-session.php                 ← empty stub (needs implementation)
 │
 ├── README.md
-├── AGENTS.md                        ← Agent guide (not pushed to remote)
+├── AGENTS.md                              ← agent guide (not pushed to remote)
 └── .gitignore
 ```
 
@@ -102,7 +105,6 @@ Interview-Process-Management/
 | `id` | INT PK AUTO_INCREMENT | |
 | `applicant_id` | INT NOT NULL | FK → applicants(id) ON DELETE CASCADE |
 | `zoom_link` | VARCHAR(255) | |
-| `status` | ENUM('pending','active','completed') | Default: pending |
 | `scheduled_date` | DATETIME | |
 | `created_at` | TIMESTAMP DEFAULT CURRENT_TIMESTAMP | |
 
@@ -136,30 +138,31 @@ Created via `backend/seed-admin.php`:
 |-----------|--------|---------|
 | Database schema | ✅ Done | 4 tables in `backend/database/schema.sql` |
 | DB connection | ✅ Done | PDO class in `backend/config/database.php` |
-| Login system | ✅ Done | Role-based auth, session handling, redirects |
-| Registration | ✅ Done | Applicant signup with validation |
-| Login page | ✅ Done | Wired to backend, error/success messages |
-| Register page | ✅ Done | Wired to backend, error messages |
-| Admin dashboard | ✅ Done | 4 cards: Create Session, Reports, Last Interview, Departments |
+| Login system | ✅ Done | Role-based auth, session handling, redirects to correct dashboards |
+| Registration | ✅ Done | Applicant signup with email check, password hashing |
+| Login page | ✅ Done | Wired to backend, JS for error/success messages |
+| Register page | ✅ Done | Wired to backend, JS for error messages |
+| Admin dashboard | ✅ Done | 4 cards: Create Session, Reports, Sessions, Departments |
+| Create Session form | ✅ Done | PHP page — fetches applicants from DB, dropdown select, zoom link, datetime |
 | ICT dashboard | ✅ Done | 2 cards: Manage Users, Departments |
 | HR dashboard | ✅ Done | 4 cards: All Sessions, Reports, Manage Applicants, Score Applicants |
-| Applicant dashboard | ✅ Done | 3 cards: Join Session, My Profile, Application Status |
-| CSS design system | ✅ Done | 265 lines — blue/orange/white theme, cards, sidebar, topbar |
+| Applicant dashboard | ✅ Done | 3 cards: Join Session (disabled), My Profile, Application Status |
+| CSS design system | ✅ Done | 348 lines — login, topbar, sidebar, cards, sub-pages, form messages |
 
 ### Not Started
 
-| Component | Priority |
-|-----------|----------|
-| `create-session.html` | High — core admin feature |
-| `reports.html` | High — used by admin + HR |
-| `manage-users.html` | High — ICT core feature |
-| `hr-sessions.html` | Medium |
-| `manage-applicants.html` | Medium |
-| `score-applicants.html` | Medium |
-| `departments.html` | Medium |
-| `profile.html` | Low — applicant readonly |
-| `application-status.html` | Low — applicant readonly |
-| `interview-score.html` | Low — standalone scoring form |
+| Component | Priority | Linked From |
+|-----------|----------|-------------|
+| `backend/create-session.php` | High | Form submits here but backend is empty |
+| `reports.html` | High | Admin + HR dashboards |
+| `manage-users.html` | High | ICT dashboard |
+| `sessions.html` | Medium | Admin dashboard |
+| `departments.html` | Medium | Admin + ICT dashboards |
+| `hr-sessions.html` | Medium | HR dashboard |
+| `manage-applicants.html` | Medium | Admin + HR dashboards |
+| `score-applicants.html` | Medium | HR dashboard |
+| `profile.html` | Low | Applicant dashboard |
+| `application-status.html` | Low | Applicant dashboard |
 
 ---
 
@@ -178,6 +181,10 @@ Created via `backend/seed-admin.php`:
 ### Access
 - **Login:** `http://localhost/Interview-Process-Management/frontend/login.html`
 - **Register:** `http://localhost/Interview-Process-Management/frontend/register.html`
+- **Admin Dashboard:** `http://localhost/Interview-Process-Management/frontend/admin-pages/admin-dashboard.html`
+- **ICT Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/ict-dashboard.html`
+- **HR Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/hr-dashboard.html`
+- **Applicant Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/applicant-dashboard.html`
 
 ---
 
@@ -187,8 +194,10 @@ Created via `backend/seed-admin.php`:
 |-------|--------|
 | 1. Database schema + DB config | ✅ Done |
 | 2. Login system | ✅ Done |
-| 3. Admin pages (sub-pages) | 🔲 Not started |
-| 4. ICT pages | 🔲 Not started |
-| 5. HR pages | 🔲 Not started |
-| 6. Applicant sub-pages | 🔲 Not started |
-| 7. Interview scoring page | 🔲 Not started |
+| 3. Admin pages (dashboard + create session form) | ✅ Done |
+| 4. Admin sub-pages (reports, sessions, departments) | 🔲 Not started |
+| 5. ICT pages (manage users, departments) | 🔲 Not started |
+| 6. HR pages (sessions, reports, manage applicants, score applicants) | 🔲 Not started |
+| 7. Applicant sub-pages (profile, application status) | 🔲 Not started |
+| 8. Interview scoring page | 🔲 Not started |
+| 9. Backend: create-session.php, CRUD operations | 🔲 Not started |

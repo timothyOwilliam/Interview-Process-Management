@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header("Location: ../frontend/dashboards/ict-dashboard.php");
                     break;
                 case 'hr':
-                    header("Location: ../frontend/dashboards/hr-dashboard.php");
+                    header("Location: ../frontend/hr-pages/hr-dashboard.php");
                     break;
                 default:
                     header("Location: ../frontend/login.php?error=Unknown+role");

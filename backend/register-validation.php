@@ -11,12 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirm_password = trim($_POST['confirm_password']);
 
     if (empty($full_name) || empty($email) || empty($phone) || empty($password) || empty($confirm_password)) {
-        header("Location: ../frontend/register.html?error=Please+fill+in+all+fields");
+        header("Location: ../frontend/register.php?error=Please+fill+in+all+fields");
         exit();
     }
 
     if ($password !== $confirm_password) {
-        header("Location: ../frontend/register.html?error=Passwords+do+not+match");
+        header("Location: ../frontend/register.php?error=Passwords+do+not+match");
         exit();
     }
 
@@ -51,15 +51,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 //the $stmt->execute will execute the query and give success mesage if not an error is given and an exit is done.
     if ($stmt->execute()) {
-        header("Location: ../frontend/login.html?success=Account+created+successfully");
+        header("Location: ../frontend/login.php?success=Account+created+successfully");
         exit();
     } else {
-        header("Location: ../frontend/register.html?error=Registration+failed.+Please+try+again.");
+        header("Location: ../frontend/register.php?error=Registration+failed.+Please+try+again.");
         exit();
     }
 
 } else {
-    header("Location: ../frontend/register.html");// if the REQUEST_METHOD is not a post stop the whole script.
+    header("Location: ../frontend/register.php");// if the REQUEST_METHOD is not a post stop the whole script.
     exit();
 }
 ?>

@@ -41,21 +41,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //Redirect the user to the appropriate dashboard when depending on the role
             switch ($user['role']) {
                 case 'admin':
-                    header("Location: ../frontend/admin-pages/admin-dashboard.html");
+                    header("Location: ../frontend/admin-pages/admin-dashboard.php");
                     break;
                 case 'ict':
-                    header("Location: ../frontend/dashboards/ict-dashboard.html");
+                    header("Location: ../frontend/dashboards/ict-dashboard.php");
                     break;
                 case 'hr':
-                    header("Location: ../frontend/dashboards/hr-dashboard.html");
+                    header("Location: ../frontend/dashboards/hr-dashboard.php");
                     break;
                 default:
-                    header("Location: ../frontend/login.html?error=Unknown+role");
+                    header("Location: ../frontend/login.php?error=Unknown+role");
                     break;
             }
             exit();
         } else {
-            header("Location: ../frontend/login.html?error=Invalid+email+or+password");//if password is wrong exit the script and redirect back to the login page
+            header("Location: ../frontend/login.php?error=Invalid+email+or+password");//if password is wrong exit the script and redirect back to the login page
             exit();
         }
     }
@@ -76,20 +76,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = 'applicant';
 
-            header("Location: ../frontend/dashboards/applicant-dashboard.html");
+            header("Location: ../frontend/dashboards/applicant-dashboard.php");
             exit();
         } else {
-            header("Location: ../frontend/login.html?error=Invalid+email+or+password");
+            header("Location: ../frontend/login.php?error=Invalid+email+or+password");
             exit();
         }
     }
 
     // Not found in either table
-    header("Location: ../frontend/login.html?error=Invalid+email+or+password");
+    header("Location: ../frontend/login.php?error=Invalid+email+or+password");
     exit();
 
 } else {
-    header("Location: ../frontend/login.html");//The form upload was not a POST
+    header("Location: ../frontend/login.php");//The form upload was not a POST
     exit();
 }
 ?>

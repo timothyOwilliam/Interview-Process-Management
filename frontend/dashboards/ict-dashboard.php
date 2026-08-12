@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="../assets/favicon.ico">
     <title>Dashboard - ICT</title>
 </head>
 <body>
@@ -22,7 +23,7 @@
         </aside>
 
         <main class="dashboard-content">
-            <h1>Welcome, ICT</h1>
+            <h1>Welcome, <?=$_SESSION["user_name"]?></h1>
 <!-- Cards for accessing manage users and departments for ICT department -->
             <div class="cards-grid">
                 <a href="manage-users.php" class="card">

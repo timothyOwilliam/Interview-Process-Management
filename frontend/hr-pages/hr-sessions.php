@@ -23,6 +23,7 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displ
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="../assets/favicon.ico">
     <title>All Sessions - HR</title>
 </head>
 <body>
@@ -51,8 +52,8 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displ
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- List all of the rows from the database into the page in a table form, looping through each -->
-                        <?php foreach ($sessions as $s): ?>
+                        <!-- List all of the rows from the database into the page in a table form, looping through each. -->
+                        <?php foreach ($sessions as $s)://s for 1 session row ?>
                             <tr>
                                 <td><?= htmlspecialchars($s['applicant_name']) ?></td>
                                 <td><?= htmlspecialchars($s['position']) ?></td>

@@ -1,4 +1,5 @@
 <?php
+// TODO : Review all of the code below and add comments
 
 session_start();
 

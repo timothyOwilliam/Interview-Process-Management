@@ -64,9 +64,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $_SESSION['error_msg'] = "Not a POST request.";
     header("Location: ../frontend/admin-pages/create-session.php");
 }
-    
-//The session will send links to the applicant and the HR and Applicant
-//
+
+
 
 
 ?>

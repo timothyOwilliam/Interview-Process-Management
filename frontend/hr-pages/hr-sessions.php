@@ -15,6 +15,8 @@ $stmt = $conn->prepare("
 ");
 $stmt->execute(); //execute the statement
 $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displayed.
+
+
 ?>
 
 <!DOCTYPE html>
@@ -66,8 +68,8 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displ
                                 </td>
                                 <td><?= htmlspecialchars($s['scheduled_date']) ?></td>
                                 <td>
-                                    <?php if (!empty($s['zoom_link'])): ?>
-                                        <a href="<?= htmlspecialchars($s['zoom_link']) ?>" target="_blank" class="join-btn">Join</a>
+                                    <?php if (!empty($s['zoom_link']))://this just checks if there is a link attached, meaning the session is on ?>
+                                        <a href="../score-card.php?session_id=<?=$s['id'] ?>" class="join-btn">Join</a>
                                     <?php else: ?>
                                         <span class="text-muted">No link</span>
                                     <?php endif; ?>
@@ -79,6 +81,6 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displ
             </div>
         <?php endif; ?>
     </main>
-
+    
 </body>
 </html>

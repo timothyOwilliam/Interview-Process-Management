@@ -51,12 +51,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     //confirm the session was created
     if($stmt -> execute()){
-        header("Location: ../frontend/admin-pages/create-session.php?success=Session+created+successfully"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
-        
+
+        $session_id = $conn-> lastInsertId(); //get the session_id
+        //get the applicant_name from the last query
+        $stmt = $conn->prepare("SELECT applicants.name AS applicant_name FROM sessions 
+        JOIN applicants
+        WHERE sessions.id = :session_id");
+
+        $stmt->bindParam(':session_id', $session_id);//bind the placeholder with the session_id
+        $stmt-> execute(); 
+
+        $applicant_name = $stmt->fetch(PDO::FETCH_ASSOC);//we get an assoc array of with the applicant name, we store it in applicant_name
+
+        echo $applicant_name;
+
+        createRowForScoreSheet($session_id, $applicant_name["applicant_name"]); //Row initilization
+
+        header("Location: ../frontend/admin-pages/create-session.php?success=$applicant_name"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
+
     } else {
         header("Location: ../frontend/admin-pages/create-session.php?error=Failed+to+create+session.+Try+again");
         exit();
-    }
+    }    
 
 
 } else {
@@ -65,6 +81,38 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     header("Location: ../frontend/admin-pages/create-session.php");
 }
 
+//Function to initialise a row for the scores table
+function createRowForScoreSheet($session_id, $applicant_name){
+    
+    $database = new Database();
+    $conn = $database -> getConnection();
+
+
+    //All values are zeros for now
+    $technical_skills = 0;
+    $communication = 0;
+    $confidence = 0;
+    $work_ethic = 0;
+    $team_fit = 0;
+    $total = 0;
+
+    $stmt = $conn->prepare("INSERT INTO scores (session_id, applicant_name,technical_skills, communication, confidence, work_ethic, team_fit, total)
+                        VALUES (:session_id, :applicant_name, :technical_skills, :communication, :confidence, :work_ethic, :team_fit, :total)");
+
+    //bind values to placeholder
+    $stmt ->bindParam(":session_id",$session_id);
+    $stmt ->bindParam(":applicant_name",$applicant_name);
+    $stmt ->bindParam(":technical_skills", $technical_skills);
+    $stmt ->bindParam(":communication", $communication);
+    $stmt ->bindParam(":confidence", $confidence);
+    $stmt ->bindParam(":work_ethic", $work_ethic);
+    $stmt ->bindParam(":team_fit", $team_fit);
+    $stmt ->bindParam(":total", $total);
+
+    $stmt->execute();
+
+    //Now we have the rows required
+}
 
 
 

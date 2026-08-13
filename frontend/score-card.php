@@ -22,6 +22,8 @@ $scores = [];
 $aggregates = [];
 
 if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
+
+//This will fetch details of the applicant so that it can be displayed
     $session_id = intval($_GET['session_id']);
 
     $stmt = $conn->prepare("
@@ -33,35 +35,8 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
         WHERE sessions.id = :session_id
     ");
     $stmt->execute([':session_id' => $session_id]);
-    $session = $stmt->fetch(PDO::FETCH_ASSOC);
+    $session = $stmt->fetch(PDO::FETCH_ASSOC); //contains the session details and the details of the applicants that will be displayed in the UI
 
-    if ($session) {
-        $stmt = $conn->prepare("SELECT * FROM scores WHERE session_id = :session_id");
-        $stmt->execute([':session_id' => $session_id]);
-        $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $count = count($scores);
-        $agg = [
-            'technical_skills' => 0,
-            'communication'    => 0,
-            'confidence'       => 0,
-            'work_ethic'       => 0,
-            'team_fit'         => 0,
-            'total'            => 0,
-            'count'            => $count,
-        ];
-
-        foreach ($scores as $row) {
-            $agg['technical_skills'] += $row['technical_skills'];
-            $agg['communication']    += $row['communication'];
-            $agg['confidence']       += $row['confidence'];
-            $agg['work_ethic']       += $row['work_ethic'];
-            $agg['team_fit']         += $row['team_fit'];
-            $agg['total']            += $row['total'];
-        }
-
-        $aggregates = $agg;
-    }
 }
 ?>
 
@@ -84,18 +59,6 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
         <a href="hr-pages/hr-dashboard.php" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>Score Card</h1>
-
-        <?php if (!empty($message)): ?>
-            <div class="<?= $messageType === 'success' ? 'success-message' : 'error-message' ?>" style="display:block; max-width:900px; margin: 0 auto 1.5rem;">
-                <?= htmlspecialchars($message) ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (!$session): ?>
-
-            <p class="empty-state">Session not found or missing session ID.</p>
-
-        <?php else: ?>
 
             <!-- Applicant Details -->
             <div class="table-wrapper">
@@ -150,43 +113,6 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
                 </table>
             </div>
 
-            <!-- Submitted Scores Summary -->
-            <div class="table-wrapper" style="margin-top: 2rem;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Submitted Scores (<?= $aggregates['count'] ?> total)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>Technical Skills</th>
-                            <td><?= $aggregates['technical_skills'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Communication</th>
-                            <td><?= $aggregates['communication'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Confidence</th>
-                            <td><?= $aggregates['confidence'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Work Ethic</th>
-                            <td><?= $aggregates['work_ethic'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Team Fit</th>
-                            <td><?= $aggregates['team_fit'] ?></td>
-                        </tr>
-                        <tr>
-                            <th>Total</th>
-                            <td><?= $aggregates['total'] ?></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
             <!-- Scoring Form -->
             <div class="login-section" style="margin-top: 2rem;">
                 <form action="../backend/submit-score.php" method="POST" class="login-details">
@@ -208,35 +134,13 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
                     <label for="team_fit">Team Fit (1–5)</label>
                     <input type="number" name="team_fit" id="team_fit" min="1" max="5" required placeholder="1 – 5">
 
-                    <label for="total">Total</label>
-                    <input type="number" name="total_display" id="total" min="5" max="25" readonly placeholder="Auto-calculated">
-
                     <button type="submit" class="sign-in-button">Submit Score</button>
                 </form>
             </div>
 
-        <?php endif; ?>
     </main>
 
-    <script>
-        (function() {
-            var fields = ['technical_skills', 'communication', 'confidence', 'work_ethic', 'team_fit'];
-            var totalField = document.getElementById('total');
 
-            function sum() {
-                var t = 0;
-                for (var i = 0; i < fields.length; i++) {
-                    var v = parseInt(document.getElementById(fields[i]).value);
-                    if (!isNaN(v)) t += v;
-                }
-                totalField.value = t;
-            }
-
-            for (var i = 0; i < fields.length; i++) {
-                document.getElementById(fields[i]).addEventListener('input', sum);
-            }
-        })();
-    </script>
 
 </body>
 </html>

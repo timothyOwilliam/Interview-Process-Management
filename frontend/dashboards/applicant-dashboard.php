@@ -10,10 +10,10 @@ if(!isset($_SESSION["user_id"]) || $_SESSION["user_role"] !== "applicant"){
     exit();    
     
 }
-$database = new Database();
+$database = new Database(); //start a database instance
 $conn = $database->getConnection();
 
-$applicant_id = $_SESSION["user_id"];
+$applicant_id = $_SESSION["user_id"]; //user_id attached to a session is applied to $applicant_id
 
 
 $stmt = $conn->prepare("SELECT zoom_link FROM sessions WHERE applicant_id= :id ");

@@ -57,6 +57,8 @@ if ($stmt -> rowCount() > 0){
 
         <div class="login-section">
             <form action="../../backend/create-session.php" method="POST" class="login-details">
+
+                
                 <label for="applicant_id">Applicant</label>
                 <select name="applicant_id" id="applicant_id" required>
                     <option value="" disabled selected>Select an Applicant</option>

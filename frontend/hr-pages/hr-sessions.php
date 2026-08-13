@@ -12,9 +12,9 @@ $stmt = $conn->prepare("
     FROM sessions 
     JOIN applicants ON sessions.applicant_id = applicants.id
     ORDER BY sessions.scheduled_date DESC
-");
+"); //fetches the required data from the sessions and applicant tables.
 $stmt->execute(); //execute the statement
-$sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all session rows to be displayed.
+$sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query rows to be displayed.
 
 
 ?>

@@ -38,7 +38,7 @@
                     <p>View past interview reports</p>
                 </a>
                     
-                <a href="sessions.php" class="card">
+                <a href="../hr-pages/hr-sessions.php" class="card">
                     <h2>Interview Sessions</h2>
                     <p>List of all the sessions created </p>
                 </a>

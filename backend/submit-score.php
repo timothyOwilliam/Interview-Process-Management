@@ -7,6 +7,8 @@ require_once "config/database.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $total = 20;
+
     $session_id = isset($_POST['session_id']) ? intval($_POST['session_id']) : 0;
     $applicant_name = trim($_POST['applicant_name'] ?? '');
 
@@ -16,43 +18,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $work_ethic       = isset($_POST['work_ethic']) ? intval($_POST['work_ethic']) : 0;
     $team_fit         = isset($_POST['team_fit']) ? intval($_POST['team_fit']) : 0;
 
-    if ($session_id <= 0 || empty($applicant_name)) {
-        header("Location: ../frontend/score-card.php?session_id=" . $session_id . "&error=Invalid+session+or+applicant+data");
-        exit();
-    }
 
-    $criteria = [$technical_skills, $communication, $confidence, $work_ethic, $team_fit];
-
-    foreach ($criteria as $val) {
-        if ($val < 1 || $val > 5) {
-            header("Location: ../frontend/score-card.php?session_id=" . $session_id . "&error=Each+score+must+be+between+1+and+5");
-            exit();
-        }
-    }
-
-    $total = array_sum($criteria);
-
+    //Insert the totals once and add to the ones already there
     $database = new Database();
-    $conn = $database->getConnection();
+    $conn = $database-> getConnection();
 
-    $stmt = $conn->prepare("
-        INSERT INTO scores (session_id, applicant_name, technical_skills, communication, confidence, work_ethic, team_fit, total)
-        VALUES (:session_id, :applicant_name, :technical_skills, :communication, :confidence, :work_ethic, :team_fit, :total)
-    ");
+    //fetch the values already in database
+    $stmt= $conn->prepare("SELECT technical_skills, communication, confidence, work_ethic, team_fit, total FROM scores
+                            WHERE session_id = :session_id");
 
-    $stmt->execute([
-        ':session_id'       => $session_id,
-        ':applicant_name'   => $applicant_name,
-        ':technical_skills' => $technical_skills,
-        ':communication'    => $communication,
-        ':confidence'       => $confidence,
-        ':work_ethic'       => $work_ethic,
-        ':team_fit'         => $team_fit,
-        ':total'            => $total,
-    ]);
+    $stmt ->execute([':session_id' => $session_id]);//execute the session_id
 
-    header("Location: ../frontend/score-card.php?session_id=" . $session_id . "&success=Score+submitted+successfully");
-    exit();
+    $fetchedScores = $stmt -> fetch(PDO::FETCH_ASSOC);//fetch the row already in the scores table.
+
+    //add the values to POST values to the ones in the database
+    $technical_skills += $fetchedScores["technical_skills"];
+    $communication += $fetchedScores["communication"];
+    $confidence += $fetchedScores["confidence"];
+    $work_ethic += $fetchedScores["work_ethic"];
+    $team_fit += $fetchedScores["team_fit"];
+    $total += $fetchedScores["total"];
+
+    $stmt = $conn->prepare("UPDATE scores
+                            SET technical_skills = :technical_skills,
+                                communication = :communication,
+                                confidence = :confidence,
+                                work_ethic = :work_ethic,
+                                team_fit = :team_fit,
+                                total = :total
+                            WHERE session_id = :session_id");
+
+    //bind values to placeholder
+    $stmt ->bindParam(":session_id",$session_id);
+    $stmt ->bindParam(":technical_skills", $technical_skills);
+    $stmt ->bindParam(":communication", $communication);
+    $stmt ->bindParam(":confidence", $confidence);
+    $stmt ->bindParam(":work_ethic", $work_ethic);
+    $stmt ->bindParam(":team_fit", $team_fit);
+    $stmt ->bindParam(":total", $total);
+
+    $stmt->execute();
+   
+
+
+    //Once submit is done redirect back to the score-card.php and notify the scorer its been submitted and prevent a resubmission
+
+
 
 } else {
     header("Location: ../frontend/score-card.php");

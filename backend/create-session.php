@@ -54,20 +54,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         $session_id = $conn-> lastInsertId(); //get the session_id
         //get the applicant_name from the last query
-        $stmt = $conn->prepare("SELECT applicants.name AS applicant_name FROM sessions 
-        JOIN applicants
+        $stmt = $conn->prepare("SELECT applicant_id, applicants.name AS applicant_name FROM sessions 
+        JOIN applicants ON sessions.applicant_id = applicants.id
         WHERE sessions.id = :session_id");
 
         $stmt->bindParam(':session_id', $session_id);//bind the placeholder with the session_id
         $stmt-> execute(); 
 
-        $applicant_name = $stmt->fetch(PDO::FETCH_ASSOC);//we get an assoc array of with the applicant name, we store it in applicant_name
+        $applicant_details = $stmt->fetch(PDO::FETCH_ASSOC);//we get an assoc array of with the applicant details, contains applicant_id and applicant_name
 
-        echo $applicant_name;
+        createRowForScoreSheet($session_id, $applicant_details["applicant_name"], $applicant_details["applicant_id"]); //Row initilization
 
-        createRowForScoreSheet($session_id, $applicant_name["applicant_name"]); //Row initilization
+      
+        header("Location: ../frontend/admin-pages/create-session.php?success="); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
 
-        header("Location: ../frontend/admin-pages/create-session.php?success=$applicant_name"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
+
 
     } else {
         header("Location: ../frontend/admin-pages/create-session.php?error=Failed+to+create+session.+Try+again");
@@ -82,7 +83,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 
 //Function to initialise a row for the scores table
-function createRowForScoreSheet($session_id, $applicant_name){
+function createRowForScoreSheet($session_id, $applicant_name, $applicant_id){
     
     $database = new Database();
     $conn = $database -> getConnection();
@@ -96,11 +97,12 @@ function createRowForScoreSheet($session_id, $applicant_name){
     $team_fit = 0;
     $total = 0;
 
-    $stmt = $conn->prepare("INSERT INTO scores (session_id, applicant_name,technical_skills, communication, confidence, work_ethic, team_fit, total)
-                        VALUES (:session_id, :applicant_name, :technical_skills, :communication, :confidence, :work_ethic, :team_fit, :total)");
+    $stmt = $conn->prepare("INSERT INTO scores (session_id, applicant_id, applicant_name,technical_skills, communication, confidence, work_ethic, team_fit, total)
+                        VALUES (:session_id,:applicant_id, :applicant_name, :technical_skills, :communication, :confidence, :work_ethic, :team_fit, :total)");
 
     //bind values to placeholder
     $stmt ->bindParam(":session_id",$session_id);
+    $stmt ->bindParam(":applicant_id",$applicant_id);
     $stmt ->bindParam(":applicant_name",$applicant_name);
     $stmt ->bindParam(":technical_skills", $technical_skills);
     $stmt ->bindParam(":communication", $communication);

@@ -7,7 +7,6 @@ require_once "config/database.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $total = 20;
 
     $session_id = isset($_POST['session_id']) ? intval($_POST['session_id']) : 0;
     $applicant_name = trim($_POST['applicant_name'] ?? '');
@@ -18,34 +17,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $work_ethic       = isset($_POST['work_ethic']) ? intval($_POST['work_ethic']) : 0;
     $team_fit         = isset($_POST['team_fit']) ? intval($_POST['team_fit']) : 0;
 
-
-    //Insert the totals once and add to the ones already there
     $database = new Database();
     $conn = $database-> getConnection();
 
-    //fetch the values already in database
-    $stmt= $conn->prepare("SELECT technical_skills, communication, confidence, work_ethic, team_fit, total FROM scores
-                            WHERE session_id = :session_id");
+    //Sum of the values input by the interviewer
+    $total = $technical_skills + $communication + $confidence + $work_ethic + $team_fit;
 
-    $stmt ->execute([':session_id' => $session_id]);//execute the session_id
-
-    $fetchedScores = $stmt -> fetch(PDO::FETCH_ASSOC);//fetch the row already in the scores table.
-
-    //add the values to POST values to the ones in the database
-    $technical_skills += $fetchedScores["technical_skills"];
-    $communication += $fetchedScores["communication"];
-    $confidence += $fetchedScores["confidence"];
-    $work_ethic += $fetchedScores["work_ethic"];
-    $team_fit += $fetchedScores["team_fit"];
-    $total += $fetchedScores["total"];
-
+    //Atomic UPDATE: adds the new scores to the existing values in a single step.
+    //This avoids the race condition where concurrent submissions overwrite each other's data.
     $stmt = $conn->prepare("UPDATE scores
-                            SET technical_skills = :technical_skills,
-                                communication = :communication,
-                                confidence = :confidence,
-                                work_ethic = :work_ethic,
-                                team_fit = :team_fit,
-                                total = :total
+                            SET technical_skills = technical_skills + :technical_skills,
+                                communication = communication + :communication,
+                                confidence = confidence + :confidence,
+                                work_ethic = work_ethic + :work_ethic,
+                                team_fit = team_fit + :team_fit,
+                                total = total + :total
                             WHERE session_id = :session_id");
 
     //bind values to placeholder
@@ -58,13 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt ->bindParam(":total", $total);
 
     $stmt->execute();
-   
-
 
     //Once submit is done redirect back to the score-card.php and notify the scorer its been submitted and prevent a resubmission
 
-
-
+    header("Location: ../frontend/score-card.php?session_id=" . $session_id . "&success=Score+submitted+successfully");
+    exit();
 } else {
     header("Location: ../frontend/score-card.php");
     exit();

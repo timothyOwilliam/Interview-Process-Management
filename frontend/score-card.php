@@ -37,7 +37,16 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
     $stmt->execute([':session_id' => $session_id]);
     $session = $stmt->fetch(PDO::FETCH_ASSOC); //contains the session details and the details of the applicants that will be displayed in the UI
 
+} else {
+    header("Location: hr-pages/hr-dashboard.php?error=No+session+selected");
+    exit();
 }
+
+if ($session === false) {
+    header("Location: hr-pages/hr-dashboard.php?error=Session+not+found");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +69,12 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
 
         <h1>Score Card</h1>
 
+            <!-- Success/Error message -->
+            <?php if (!empty($message)): ?>
+                <div class="<?= $messageType === 'success' ? 'success-message' : 'error-message' //makes the class either success or error and used to style in the .css file ?>" style="display:block;">
+                    <?= htmlspecialchars($message)?>
+                </div>
+            <?php endif; ?>
             <!-- Applicant Details -->
             <div class="table-wrapper">
                 <table class="data-table">

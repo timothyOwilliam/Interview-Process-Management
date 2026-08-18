@@ -409,3 +409,40 @@ body {
     font-size: 1rem;
     margin-top: 2rem;
 }
+
+/* ========================
+   SUB-PAGE HEADER / EXPORT BUTTON
+   ======================== */
+
+.page-header {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.export-btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    background-color: var(--third-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.export-btn:hover {
+    opacity: 0.9;
+}

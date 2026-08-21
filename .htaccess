@@ -1,0 +1,16 @@
+# Block access to .env files
+<Files ".env">
+    Require all denied
+</Files>
+
+#1. Enable the rewrite engine
+RewriteEngine On
+
+#2. Exclude physical files (like style.css, logo.png, favicon.ico)
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#3. Exclude physical folders (like assets/)
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#4. Route everything else to the index.php router
+RewriteRule ^ index.php [L]

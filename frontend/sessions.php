@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once "../../backend/config/database.php";
+require_once __DIR__ . "/../backend/config/database.php";
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -16,7 +15,6 @@ $stmt = $conn->prepare("
 $stmt->execute(); //execute the statement
 $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query rows to be displayed.
 
-
 ?>
 
 <!DOCTYPE html>
@@ -24,18 +22,18 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="icon" href="../assets/favicon.ico">
+    <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
+    <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
     <title>All Sessions - HR</title>
 </head>
 <body>
 
     <header class="topbar">
-        <img src="../assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
     </header>
 
     <main class="page-content">
-        <a href="hr-dashboard.php" class="back-link">&larr; Back to Dashboard</a>
+        <a href="<?= APP_BASE ?>/hr" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>All Interview Sessions</h1>
 
@@ -69,7 +67,7 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query 
                                 <td><?= htmlspecialchars($s['scheduled_date']) ?></td>
                                 <td>
                                     <?php if (!empty($s['zoom_link']))://this just checks if there is a link attached, meaning the session is on ?>
-                                        <a href="../score-card.php?session_id=<?=$s['id'] ?>" class="join-btn">Join</a>
+                                        <a href="<?= APP_BASE ?>/score-card?session_id=<?=$s['id'] ?>" class="join-btn">Join</a>
                                     <?php else: ?>
                                         <span class="text-muted">No link</span>
                                     <?php endif; ?>

@@ -1,12 +1,10 @@
 <?php
-
-session_start();
-require_once "../../backend/config/database.php";
+require_once __DIR__ . "/../../backend/config/database.php"; //creates absolute path for the, which is used for routing purposes
 
 //if the there is no identity in the session stop it
 if(!isset($_SESSION["user_id"]) || $_SESSION["user_role"] !== "applicant"){
 
-    header("Location: ../login.php");
+    header("Location: " . APP_BASE . "/login");
     exit();    
     
 }
@@ -29,24 +27,24 @@ $applicant_zoom_link = $session_details ? $session_details["zoom_link"] : "";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="icon" href="../assets/favicon.ico">
+    <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
+    <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
     <title>Dashboard - Applicant</title>
 </head>
 <body>
 
     <header class="topbar">
-        <img src="../assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
     </header>
 
     <div class="dashboard-layout">
         <aside class="sidebar">
             <nav class="sidebar-nav">
-                <a href="applicant-dashboard.php" class="active">Dashboard</a>
-                <a href="profile.php">My Profile</a>
-                <a href="application-status.php">Application Status</a>
+                <a href="<?= APP_BASE ?>/applicant" class="active">Dashboard</a>
+                <a href="<?= APP_BASE ?>/applicant/profile">My Profile</a>
+                <a href="<?= APP_BASE ?>/applicant/application-status">Application Status</a>
             </nav>
-            <a href="../login.php" class="logout">Logout</a>
+            <a href="<?= APP_BASE ?>/login" class="logout">Logout</a>
         </aside>
 
         <main class="dashboard-content">
@@ -64,12 +62,12 @@ $applicant_zoom_link = $session_details ? $session_details["zoom_link"] : "";
                     </a>
                 </div>
 
-                <a href="profile.php" class="card">
+                <a href="<?= APP_BASE ?>/applicant/profile" class="card">
                     <h2>My Profile</h2>
                     <p>View your personal information</p>
                 </a>
 
-                <a href="application-status.php" class="card">
+                <a href="<?= APP_BASE ?>/applicant/application-status" class="card">
                     <h2>Application Status</h2>
                     <p>Track your application progress</p>
                 </a>

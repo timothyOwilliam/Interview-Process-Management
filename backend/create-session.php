@@ -2,6 +2,7 @@
 
 session_start();
 
+require_once "config/app.php";
 require_once "config/database.php";
 
 //The session will be created and saved in the database
@@ -66,12 +67,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         createRowForScoreSheet($session_id, $applicant_details["applicant_name"], $applicant_details["applicant_id"]); //Row initilization
 
       
-        header("Location: ../frontend/admin-pages/create-session.php?success="); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
+        header("Location: " . APP_BASE . "/admin/create-session?success=1"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
 
 
 
     } else {
-        header("Location: ../frontend/admin-pages/create-session.php?error=Failed+to+create+session.+Try+again");
+        header("Location: " . APP_BASE . "/admin/create-session?error=Failed+to+create+session.+Try+again");
         exit();
     }    
 
@@ -79,7 +80,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 } else {
 
     $_SESSION['error_msg'] = "Not a POST request.";
-    header("Location: ../frontend/admin-pages/create-session.php");
+    header("Location: " . APP_BASE . "/admin/create-session");
 }
 
 //Function to initialise a row for the scores table

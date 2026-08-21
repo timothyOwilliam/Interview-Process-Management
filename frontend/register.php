@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
+    <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
     <title>Register</title>
 </head>
 <body class="login-page">
-    <img src="assets/NCIA-Logo-2022.png" alt="NCIA logo" width="200" height="70">
+    <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="200" height="70">
 
     <div class="login-section">
         <h2 class="form-title">Applicant Registration</h2>
-        <form class="login-details" action="../backend/register-validation.php" method="POST">
+        <form class="login-details" action="<?= APP_BASE ?>/backend/register-validation.php" method="POST">
 
             <div id="error-message" style="display:none; color:red; margin-bottom:10px;"></div>
 
@@ -43,7 +43,7 @@
 
             <button class="sign-in-button">Register</button>
 
-            <p class="form-link">Already have an account? <a href="login.php">Sign in</a></p>
+            <p class="form-link">Already have an account? <a href="<?= APP_BASE ?>/login">Sign in</a></p>
         </form>
     </div>
 

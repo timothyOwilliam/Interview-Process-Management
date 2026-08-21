@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
+    <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
     <title>Log in</title>
 </head>
 <body class="login-page">
-    <img src="assets/NCIA-Logo-2022.png" alt="NCIA logo" width="200" height="70">
+    <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="200" height="70">
 
     <div class="login-section">
-        <form class="login-details" action="../backend/login-validation.php" method="POST">
+        <form class="login-details" action="<?= APP_BASE ?>/backend/login-validation.php" method="POST">
 
             <div id="error-message" style="display:none; color:red; margin-bottom:10px;"></div>
             <div id="success-message" style="display:none; color:green; margin-bottom:10px;"></div>
@@ -28,7 +28,7 @@
 
             <button class="sign-in-button">Sign in</button>
 
-            <p class="form-link">Don't have an account? <a href="register.php">Register</a></p>
+            <p class="form-link">Don't have an account? <a href="<?= APP_BASE ?>/register">Register</a></p>
 
         </form>
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once "config/app.php";
 require_once "config/database.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = trim($_POST['password']);
 
     if (empty($email) || empty($password)) {
-        header("Location: ../frontend/login.php?error=Please+fill+in+all+fields");
+        header("Location: " . APP_BASE . "/login?error=Please+fill+in+all+fields");
         exit();
     }
 
@@ -31,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC); //fetch the values and gets them in an associative array and stores it in the $stmt variable
 
 //Verify if the password entered (stored in $passsword ) matches the one stored in $user, the one returned when the whole row was fetched
+        //Below saves details of the user in a session.
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
@@ -41,21 +43,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //Redirect the user to the appropriate dashboard when depending on the role
             switch ($user['role']) {
                 case 'admin':
-                    header("Location: ../frontend/admin-pages/admin-dashboard.php");
+                    header("Location: " . APP_BASE . "/admin");
                     break;
                 case 'ict':
-                    header("Location: ../frontend/dashboards/ict-dashboard.php");
+                    header("Location: " . APP_BASE . "/ict");
                     break;
                 case 'hr':
-                    header("Location: ../frontend/hr-pages/hr-dashboard.php");
+                    header("Location: " . APP_BASE . "/hr");
                     break;
                 default:
-                    header("Location: ../frontend/login.php?error=Unknown+role");
+                    header("Location: " . APP_BASE . "/login?error=Unknown+role");
                     break;
             }
             exit();
         } else {
-            header("Location: ../frontend/login.php?error=Invalid+email+or+password");//if password is wrong exit the script and redirect back to the login page
+            header("Location: " . APP_BASE . "/login?error=Invalid+email+or+password");//if password is wrong exit the script and redirect back to the login page
             exit();
         }
     }
@@ -69,27 +71,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($stmt->rowCount() > 0) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);//get an associative array for the row
 
-
+        //Below saves details of the user in a session.
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = 'applicant';
 
-            header("Location: ../frontend/dashboards/applicant-dashboard.php");
+            header("Location: " . APP_BASE . "/applicant");
             exit();
         } else {
-            header("Location: ../frontend/login.php?error=Invalid+email+or+password");
+            header("Location: " . APP_BASE . "/login?error=Invalid+email+or+password");
             exit();
         }
     }
 
     // Not found in either table
-    header("Location: ../frontend/login.php?error=Invalid+email+or+password");
+    header("Location: " . APP_BASE . "/login?error=Invalid+email+or+password");
     exit();
 
 } else {
-    header("Location: ../frontend/login.php");//The form upload was not a POST
+    header("Location: " . APP_BASE . "/login");//The form upload was not a POST
     exit();
 }
 ?>

@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once "../backend/config/database.php";
+require_once __DIR__ . "/../backend/config/database.php";
 
 $database = new Database();
 $conn = $database->getConnection();
@@ -38,12 +37,12 @@ if (isset($_GET['session_id']) && is_numeric($_GET['session_id'])) {
     $session = $stmt->fetch(PDO::FETCH_ASSOC); //contains the session details and the details of the applicants that will be displayed in the UI
 
 } else {
-    header("Location: hr-pages/hr-dashboard.php?error=No+session+selected");
+    header("Location: " . APP_BASE . "/hr?error=No+session+selected");
     exit();
 }
 
 if ($session === false) {
-    header("Location: hr-pages/hr-dashboard.php?error=Session+not+found");
+    header("Location: " . APP_BASE . "/hr?error=Session+not+found");
     exit();
 }
 
@@ -54,18 +53,18 @@ if ($session === false) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
+    <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
     <title>Score Card</title>
 </head>
 <body>
 
     <header class="topbar">
-        <img src="assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
     </header>
 
     <main class="page-content">
-        <a href="hr-pages/hr-dashboard.php" class="back-link">&larr; Back to Dashboard</a>
+        <a href="<?= APP_BASE ?>/<?=$_SESSION['user_role']?>" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>Score Card</h1>
 
@@ -130,7 +129,7 @@ if ($session === false) {
 
             <!-- Scoring Form -->
             <div class="login-section" style="margin-top: 2rem;">
-                <form action="../backend/submit-score.php" method="POST" class="login-details">
+                <form action="<?= APP_BASE ?>/backend/submit-score.php" method="POST" class="login-details">
                     <input type="hidden" name="session_id" value="<?= $session['session_id'] ?>">
                     <input type="hidden" name="applicant_name" value="<?= htmlspecialchars($session['applicant_name']) ?>">
 

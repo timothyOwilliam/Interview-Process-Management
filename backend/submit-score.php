@@ -3,6 +3,7 @@
 
 session_start();
 
+require_once "config/app.php";
 require_once "config/database.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     //Once submit is done redirect back to the score-card.php and notify the scorer its been submitted and prevent a resubmission
 
-    header("Location: ../frontend/score-card.php?session_id=" . $session_id . "&success=Score+submitted+successfully");
+    header("Location: " . APP_BASE . "/score-card?session_id=" . $session_id . "&success=Score+submitted+successfully");
     exit();
 } else {
-    header("Location: ../frontend/score-card.php");
+    header("Location: " . APP_BASE . "/score-card");
     exit();
 }

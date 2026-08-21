@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once "config/app.php";
 require_once "config/database.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -11,12 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirm_password = trim($_POST['confirm_password']);
 
     if (empty($full_name) || empty($email) || empty($phone) || empty($password) || empty($confirm_password)) {
-        header("Location: ../frontend/register.php?error=Please+fill+in+all+fields");
+        header("Location: " . APP_BASE . "/register?error=Please+fill+in+all+fields");
         exit();
     }
 
     if ($password !== $confirm_password) {
-        header("Location: ../frontend/register.php?error=Passwords+do+not+match");
+        header("Location: " . APP_BASE . "/register?error=Passwords+do+not+match");
         exit();
     }
 
@@ -34,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //Confirms how many rows were affected by the previous query
 // if true it means the email exists 
     if ($stmt->rowCount() > 0) {
-        header("Location: ../frontend/register.php?error=Email+already+registered");
+        header("Location: " . APP_BASE . "/register?error=Email+already+registered");
         exit(); //stop the whole process/script
     }
 
@@ -51,15 +52,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 //the $stmt->execute will execute the query and give success mesage if not an error is given and an exit is done.
     if ($stmt->execute()) {
-        header("Location: ../frontend/login.php?success=Account+created+successfully");
+        header("Location: " . APP_BASE . "/login?success=Account+created+successfully");
         exit();
     } else {
-        header("Location: ../frontend/register.php?error=Registration+failed.+Please+try+again.");
+        header("Location: " . APP_BASE . "/register?error=Registration+failed.+Please+try+again.");
         exit();
     }
 
 } else {
-    header("Location: ../frontend/register.php");// if the REQUEST_METHOD is not a post stop the whole script.
+    header("Location: " . APP_BASE . "/register");// if the REQUEST_METHOD is not a post stop the whole script.
     exit();
 }
 ?>

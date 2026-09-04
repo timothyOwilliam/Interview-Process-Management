@@ -76,7 +76,7 @@ if (isset($_GET["export"]) && $_GET["export"] === "csv"){
     </header>
 
     <main class="page-content">
-        <a href="<?= APP_BASE ?>/admin" class="back-link">&larr; Back to Dashboard</a>
+        <a href="<?= APP_BASE ?>/<?= $_SESSION["user_role"]?>" class="back-link">&larr; Back to Dashboard</a>
 
         <div class="page-header">
             <h1>Interview Reports</h1>

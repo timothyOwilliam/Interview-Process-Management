@@ -33,7 +33,7 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query 
     </header>
 
     <main class="page-content">
-        <a href="<?= APP_BASE ?>/hr" class="back-link">&larr; Back to Dashboard</a>
+        <a href="<?= APP_BASE ?>/<?= $_SESSION['user_role']?>" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>All Interview Sessions</h1>
 

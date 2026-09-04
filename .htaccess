@@ -14,3 +14,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 #4. Route everything else to the index.php router
 RewriteRule ^ index.php [L]
+
+#4. Maintain the Kenyan timezone
+php_value date.timezone "Africa/Nairobi"

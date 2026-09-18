@@ -14,6 +14,9 @@
 
     <header class="topbar">
         <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <button class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <div class="dashboard-layout">
@@ -23,20 +26,28 @@
                 <a href="<?= APP_BASE ?>/hr/sessions">All Sessions</a>
                 <a href="<?= APP_BASE ?>/reports">Reports</a>
                 <a href="<?= APP_BASE ?>/hr/manage-applicants">Manage Applicants</a>
+                <a href="<?= APP_BASE ?>/create-session">Create Session</a>
                 <a href="<?= APP_BASE ?>/hr/score-applicants">Score Applicants</a>
             </nav>
             <a href="<?= APP_BASE ?>/login" class="logout">Logout</a>
         </aside>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
         <main class="dashboard-content">
             <h1>Welcome <?=$_SESSION["user_name"]?></h1>
 
             <div class="cards-grid">
+
+                <a href="<?= APP_BASE ?>/create-session" class="card">
+                    <h2>Create Session</h2>
+                    <p>Generate a new interview link</p>
+                </a>
+
                 <a href="<?= APP_BASE ?>/sessions" class="card">
                     <h2>All Sessions</h2>
                     <p>View all interview sessions</p>
                 </a>
-
+                
                 <a href="<?= APP_BASE ?>/reports" class="card">
                     <h2>Interview Reports</h2>
                     <p>View interview reports</p>
@@ -51,5 +62,11 @@
         </main>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

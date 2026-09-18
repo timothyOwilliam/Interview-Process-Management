@@ -46,9 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $stmt->execute();
 
-    //Once submit is done redirect back to the score-card.php and notify the scorer its been submitted and prevent a resubmission
 
+    //Once submit is done redirect back to the score-card.php and notify the scorer its been submitted and prevent a resubmission
     header("Location: " . APP_BASE . "/score-card?session_id=" . $session_id . "&success=Score+submitted+successfully");
+
     exit();
 } else {
     header("Location: " . APP_BASE . "/score-card");

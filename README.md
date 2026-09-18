@@ -31,7 +31,7 @@ Applicant registers & creates profile
 - **Backend:** PHP (XAMPP — Apache + MySQL)
 - **Frontend:** Vanilla HTML/CSS — no frameworks, no JS libraries
 - **Database:** MySQL
-- **Server:** XAMPP Apache required
+- **Server:** XAMPP Apache required (clean URLs via `.htaccess` and a single-entry PHP router)
 
 ---
 
@@ -39,34 +39,87 @@ Applicant registers & creates profile
 
 ```
 Interview-Process-Management/
+├── index.php                              ← Main entry point / router (clean URLs)
+├── .htaccess                              ← Apache rewrite rules (all requests → index.php)
+│
 ├── frontend/
-│   ├── style.css                          ← 348 lines — all shared styles
-│   ├── login.html                         ← wired to backend/login-validation.php
-│   ├── register.html                      ← wired to backend/register-validation.php
+│   ├── style.css                          ← Shared styles
+│   ├── login.php                          ← Login page (served via router)
+│   ├── register.php                       ← Registration page (served via router)
+│   ├── report.php                         ← Reports page (served via router)
+│   ├── score-card.php                     ← Interview scoring form (served via router)
+│   ├── sessions.php                       ← All sessions list (served via router)
 │   ├── assets/
 │   │   └── NCIA-Logo-2022.png
-│   ├── dashboards/
-│   │   ├── ict-dashboard.html             ← ICT landing page
-│   │   ├── hr-dashboard.html              ← HR landing page
-│   │   └── applicant-dashboard.html       ← Applicant landing page
-│   └── admin-pages/
-│       ├── admin-dashboard.html           ← Admin landing page
-│       └── create-session.php             ← PHP form (fetches applicants from DB)
+│   ├── admin-pages/
+│   │   ├── admin-dashboard.php            ← Admin landing page
+│   │   └── create-session.php             ← Create interview session form
+│   ├── hr-pages/
+│   │   └── hr-dashboard.php               ← HR landing page
+│   ├── ict-pages/
+│   │   └── ict-dashboard.php              ← ICT landing page
+│   └── applicant-pages/
+│       ├── applicant-dashboard.php        ← Applicant landing page
+│       └── profile.php                    ← Applicant profile (not implemented)
 │
 ├── backend/
 │   ├── config/
-│   │   └── database.php                   ← PDO connection class
+│   │   ├── app.php                        ← Environment detection (isLocal, APP_BASE)
+│   │   ├── database.php                   ← PDO connection class (reads .env on production)
+│   │   ├── env.php                        ← Lightweight .env parser
+│   │   ├── .env                           ← Production credentials (gitignored)
+│   │   ├── .env.example                   ← Template for credentials
+│   │   ├── schema.sql                     ← 4 tables: employees, applicants, sessions, scores
+│   │   └── .htaccess                      ← Blocks web access to config folder
 │   ├── database/
-│   │   └── schema.sql                     ← 4 tables: employees, applicants, sessions, scores
-│   ├── login-validation.php               ← auth + role-based redirects
-│   ├── register-validation.php            ← applicant registration logic
-│   ├── seed-admin.php                     ← seeds default admin account
-│   └── create-session.php                 ← empty stub (needs implementation)
+│   │   └── schema.sql                     ← (Alias — schema moved to config/)
+│   ├── login-validation.php               ← Auth + role-based redirects
+│   ├── register-validation.php            ← Applicant registration logic
+│   ├── seed-admin.php                     ← Seeds default admin account
+│   ├── create-session.php                 ← Backend for session creation
+│   └── submit-score.php                   ← Backend for score submission
 │
 ├── README.md
-├── AGENTS.md                              ← agent guide (not pushed to remote)
+├── AGENTS.md                              ← Agent guide (not pushed to remote)
 └── .gitignore
 ```
+
+### Routing
+
+All requests go through `index.php`. The `.htaccess` file rewrites every URL to the router, which maps clean paths to the correct PHP file:
+
+| Route | PHP File | RBAC Gate |
+|-------|----------|-----------|
+| `/login` | `frontend/login.php` | Public |
+| `/register` | `frontend/register.php` | Public |
+| `/admin` | `frontend/admin-pages/admin-dashboard.php` | admin |
+| `/admin/create-session` | `frontend/admin-pages/create-session.php` | admin |
+| `/admin/sessions` | `frontend/sessions.php` | admin |
+| `/admin/reports` | `frontend/report.php` | admin |
+| `/admin/departments` | 404 (not implemented) | admin |
+| `/hr` | `frontend/hr-pages/hr-dashboard.php` | hr |
+| `/hr/sessions` | `frontend/sessions.php` | hr |
+| `/hr/reports` | `frontend/report.php` | hr |
+| `/hr/manage-applicants` | 404 (not implemented) | hr |
+| `/ict` | `frontend/ict-pages/ict-dashboard.php` | ict |
+| `/ict/manage-users` | 404 (not implemented) | ict |
+| `/ict/departments` | 404 (not implemented) | ict |
+| `/applicant` | `frontend/applicant-pages/applicant-dashboard.php` | applicant |
+| `/applicant/profile` | `frontend/applicant-pages/profile.php` | applicant |
+| `/score?session=X` | `frontend/score-card.php` | (public for now) |
+
+Backend files (e.g., `backend/login-validation.php`) are accessed directly via form POST actions and handle their own session/redirects.
+
+### Environment Handling
+
+The application auto-detects the environment using `$_SERVER['HTTP_HOST']`:
+
+| Environment | `APP_BASE` | Database Credentials |
+|-------------|------------|----------------------|
+| **Local (XAMPP)** | `/Interview-Process-Management` | Constructor fallbacks (localhost, root, empty password) |
+| **Production (InfinityFree)** | *(empty)* | Loaded from `backend/config/.env` |
+
+No manual switching required. The `.env` file is only used in production and is excluded from git.
 
 ---
 
@@ -136,33 +189,32 @@ Created via `backend/seed-admin.php`:
 
 | Component | Status | Details |
 |-----------|--------|---------|
-| Database schema | ✅ Done | 4 tables in `backend/database/schema.sql` |
+| Database schema | ✅ Done | 4 tables in `backend/config/schema.sql` |
 | DB connection | ✅ Done | PDO class in `backend/config/database.php` |
+| PHP Router | ✅ Done | Single-entry `index.php` with `.htaccess` rewrite rules |
+| Environment Detection | ✅ Done | `APP_BASE` auto-switches between local/production paths |
+| `.env` Credential Management | ✅ Done | Production creds in `.env` (gitignored); local uses DB fallbacks |
 | Login system | ✅ Done | Role-based auth, session handling, redirects to correct dashboards |
 | Registration | ✅ Done | Applicant signup with email check, password hashing |
 | Login page | ✅ Done | Wired to backend, JS for error/success messages |
 | Register page | ✅ Done | Wired to backend, JS for error messages |
 | Admin dashboard | ✅ Done | 4 cards: Create Session, Reports, Sessions, Departments |
-| Create Session form | ✅ Done | PHP page — fetches applicants from DB, dropdown select, zoom link, datetime |
-| ICT dashboard | ✅ Done | 2 cards: Manage Users, Departments |
-| HR dashboard | ✅ Done | 4 cards: All Sessions, Reports, Manage Applicants, Score Applicants |
-| Applicant dashboard | ✅ Done | 3 cards: Join Session (disabled), My Profile, Application Status |
-| CSS design system | ✅ Done | 348 lines — login, topbar, sidebar, cards, sub-pages, form messages |
+| Create Session form | ✅ Done | PHP form — fetches applicants from DB, dropdown select, zoom link, datetime |
+| Create Session backend | ✅ Done | Inserts into sessions table, redirects to sessions list |
+| Submit Score backend | ✅ Done | Inserts/updates scores table, prevents duplicate submissions |
+| Score Card page | ✅ Done | Fetches session details, displays criteria, submits scores |
+| All pages use `APP_BASE` | ✅ Done | All assets, links, redirects work across environments |
 
 ### Not Started
 
 | Component | Priority | Linked From |
 |-----------|----------|-------------|
-| `backend/create-session.php` | High | Form submits here but backend is empty |
-| `reports.html` | High | Admin + HR dashboards |
-| `manage-users.html` | High | ICT dashboard |
-| `sessions.html` | Medium | Admin dashboard |
-| `departments.html` | Medium | Admin + ICT dashboards |
-| `hr-sessions.html` | Medium | HR dashboard |
-| `manage-applicants.html` | Medium | Admin + HR dashboards |
-| `score-applicants.html` | Medium | HR dashboard |
-| `profile.html` | Low | Applicant dashboard |
-| `application-status.html` | Low | Applicant dashboard |
+| `applicant/profile.php` | High | Applicant dashboard card |
+| `reports.php` (full logic) | High | Admin + HR dashboards |
+| `ict/manage-users.php` | High | ICT dashboard card |
+| `admin/departments.php` | Medium | Admin + ICT dashboards |
+| `hr/manage-applicants.php` | Medium | HR dashboard card |
+| Applicant application status page | Low | Applicant dashboard card |
 
 ---
 
@@ -173,18 +225,24 @@ Created via `backend/seed-admin.php`:
 - PHP 7.4+
 - MySQL 5.7+
 
-### Database Setup
-1. Open phpMyAdmin (`http://localhost/phpmyadmin`)
-2. Import `backend/database/schema.sql`
-3. Run `backend/seed-admin.php` to create the default admin account (`http://localhost/Interview-Process-Management/backend/seed-admin.php`)
+### Local Setup
+1. Clone the repo into `C:\xampp\htdocs\Interview-Process-Management`
+2. Open phpMyAdmin (`http://localhost/phpmyadmin`)
+3. Import `backend/config/schema.sql`
+4. Run the seeder: `http://localhost/Interview-Process-Management/backend/seed-admin.php`
+5. Access the app via: `http://localhost/Interview-Process-Management/login`
 
-### Access
-- **Login:** `http://localhost/Interview-Process-Management/frontend/login.html`
-- **Register:** `http://localhost/Interview-Process-Management/frontend/register.html`
-- **Admin Dashboard:** `http://localhost/Interview-Process-Management/frontend/admin-pages/admin-dashboard.html`
-- **ICT Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/ict-dashboard.html`
-- **HR Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/hr-dashboard.html`
-- **Applicant Dashboard:** `http://localhost/Interview-Process-Management/frontend/dashboards/applicant-dashboard.html`
+### Production Setup (InfinityFree or similar)
+1. Upload all files to your hosting account
+2. Create the MySQL database and user via the hosting control panel
+3. Edit `backend/config/.env` with your production credentials
+4. Import `backend/config/schema.sql` via phpMyAdmin
+5. Run `backend/seed-admin.php` once to create the admin account
+6. The app auto-detects the environment — no further configuration needed
+
+### Default Login
+- **Email:** admin@ncia.com
+- **Password:** admin123
 
 ---
 
@@ -194,10 +252,13 @@ Created via `backend/seed-admin.php`:
 |-------|--------|
 | 1. Database schema + DB config | ✅ Done |
 | 2. Login system | ✅ Done |
-| 3. Admin pages (dashboard + create session form) | ✅ Done |
-| 4. Admin sub-pages (reports, sessions, departments) | 🔲 Not started |
-| 5. ICT pages (manage users, departments) | 🔲 Not started |
-| 6. HR pages (sessions, reports, manage applicants, score applicants) | 🔲 Not started |
-| 7. Applicant sub-pages (profile, application status) | 🔲 Not started |
-| 8. Interview scoring page | 🔲 Not started |
-| 9. Backend: create-session.php, CRUD operations | 🔲 Not started |
+| 3. PHP Router + Environment Detection | ✅ Done |
+| 4. Admin pages (dashboard + create session form) | ✅ Done |
+| 5. Admin sub-pages (reports, sessions) | ✅ Done |
+| 6. HR pages (dashboard, sessions, reports) | ✅ Done |
+| 7. Score card + Submit score backend | ✅ Done |
+| 8. Applicant sub-pages (profile, application status) | 🔲 Not started |
+| 9. ICT pages (manage users, departments) | 🔲 Not started |
+| 10. HR manage-applicants page | 🔲 Not started |
+| 11. Admin departments page | 🔲 Not started |
+| 12. Full reports with export functionality | 🔲 Not started |

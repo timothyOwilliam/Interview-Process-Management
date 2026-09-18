@@ -11,6 +11,9 @@
 
     <header class="topbar">
         <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <button class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <div class="dashboard-layout">
@@ -21,14 +24,16 @@
                 <a href="<?= APP_BASE ?>/admin/manage-applicants">Manage Applicants</a>
             </nav>
             <a href="<?= APP_BASE ?>/login" class="logout">Logout</a>
+
         </aside>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
         <main class="dashboard-content">
             <h1>Welcome, Admin</h1>
 
             <div class="cards-grid">
 <!--The a tag below has the top card - Create session card-->
-                <a href="<?= APP_BASE ?>/admin/create-session" class="card">
+                <a href="<?= APP_BASE ?>/create-session" class="card">
                     <h2>Create Session</h2>
                     <p>Generate a new interview link</p>
                 </a>
@@ -43,14 +48,20 @@
                     <p>List of all the sessions created </p>
                 </a>
 <!-- The tag below is for departments.php -->
-                <a href="<?= APP_BASE ?>/admin/departments" class="card">
-                    <h2>Departments</h2>
-                    <p>Manage departments and roles</p>
+                <a href="<?= APP_BASE ?>/manage-employees" class="card">
+                    <h2>Manage Employees</h2>
+                    <p>Add, edit and delete employee users</p>
                 </a>
             </div>
 
         </main>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

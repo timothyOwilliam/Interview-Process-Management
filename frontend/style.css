@@ -11,10 +11,15 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     min-height: 100vh;
     background-color: var(--primary-color);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
 }
 
 .login-page {
@@ -63,7 +68,33 @@ body {
     background-color: rgb(0, 0, 0);
 }
 
-.sign-in-button {
+.ts-wrapper .ts-dropdown,
+.ts-wrapper .ts-dropdown .option {
+    color: #fff;
+    background-color: #000;
+}
+
+.ts-wrapper .ts-dropdown .option.active,
+.ts-wrapper .ts-dropdown .option.selected,
+.ts-wrapper .ts-dropdown .option:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.ts-wrapper .ts-control {
+    background-color: #000;
+    color: #fff;
+}
+
+.ts-wrapper .ts-control .item {
+    color: #fff;
+}
+
+.ts-wrapper .ts-control .placeholder {
+    color: #999;
+}
+
+.sign-in-button, .score-card-button{
     width: fit-content;
     padding: 0.75rem 2rem;
     background-color: var(--third-color);
@@ -118,7 +149,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    overflow: hidden;
 }
 
 /* ========================
@@ -269,6 +300,12 @@ body {
 }
 /* The join button is disabled when there is no session created, it will be enabled when there is a session */
 .join-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Disable the submit button in the score-card */
+.score-card-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
@@ -445,4 +482,341 @@ body {
 
 .export-btn:hover {
     opacity: 0.9;
+}
+
+/* ========================
+   HAMBURGER BUTTON
+   ======================== */
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background-color: var(--secondary-color);
+    margin: 5px 0;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* ========================
+   RESPONSIVE - TABLET
+   ======================== */
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 180px;
+    }
+
+    .dashboard-content {
+        padding: 1.5rem;
+    }
+
+    .cards-grid {
+        gap: 1rem;
+    }
+
+    .card,
+    .card-full {
+        padding: 1.5rem;
+        min-height: 150px;
+    }
+}
+
+/* ========================
+   RESPONSIVE - MOBILE
+   ======================== */
+
+@media (max-width: 768px) {
+
+    /* Hamburger visible */
+    .hamburger {
+        display: block;
+    }
+
+    /* Topbar */
+    .topbar {
+        padding: 0.75rem 1rem;
+        justify-content: space-between;
+    }
+
+    /* Sidebar - off-screen by default */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding-top: 4.5rem;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Dashboard layout */
+    .dashboard-layout {
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .dashboard-content {
+        padding: 1rem;
+        justify-content: flex-start;
+        align-items: stretch;
+        overflow: hidden;
+    }
+
+    .dashboard-content h1 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Cards - single column, full width */
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .card,
+    .card-full {
+        max-width: 100%;
+        min-height: auto;
+        padding: 1.25rem;
+        justify-self: stretch;
+    }
+
+    .card h2,
+    .card-full h2 {
+        font-size: 1.1rem;
+    }
+
+    /* Sub-pages */
+    .page-content {
+        padding: 1rem;
+        overflow: hidden;
+    }
+
+    .page-content h1 {
+        font-size: 1.3rem;
+    }
+
+    .page-content .login-section {
+        max-width: 100%;
+    }
+
+    /* Page header - stack vertically */
+    .page-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: stretch;
+    }
+
+    .page-header h1 {
+        position: static;
+        transform: none;
+        text-align: center;
+    }
+
+    .export-btn {
+        text-align: center;
+    }
+
+    /* Tables - horizontal scroll */
+    .table-wrapper {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 600px;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    /* Login/Register pages */
+    .login-page img {
+        width: 140px;
+        height: auto;
+    }
+
+    .login-section {
+        padding: 1.5rem;
+        margin: 0 0.5rem;
+    }
+
+    /* Score card form */
+    .login-details input,
+    .login-details select {
+        font-size: 16px; /* prevent iOS zoom */
+    }
+
+    /* ========================
+       APPLICANT MOBILE-FIRST
+       ======================== */
+
+    /* Login/Register - full height, centered, easy to tap */
+    .login-page {
+        min-height: 100dvh;
+        padding: 1rem;
+        justify-content: center;
+    }
+
+    .login-section {
+        max-width: 100%;
+        padding: 1.5rem;
+        margin: 0 auto;
+    }
+
+    .login-details {
+        gap: 1.25rem;
+    }
+
+    .login-details label {
+        font-size: 0.95rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .login-details input,
+    .login-details select {
+        padding: 0.9rem 0.85rem;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    /* Buttons - full width, big touch targets */
+    .sign-in-button,
+    .score-card-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border-radius: 8px;
+        margin-top: 0.25rem;
+    }
+
+    .join-btn {
+        padding: 0.85rem 2.5rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border-radius: 8px;
+        min-width: 140px;
+    }
+
+    /* Applicant dashboard - stacked cards, prominent Join Session */
+    .card-full {
+        background: linear-gradient(135deg, var(--secondary-color), #2a2aaa);
+        border: 2px solid var(--third-color);
+        padding: 1.5rem;
+        min-height: auto;
+        gap: 0.75rem;
+    }
+
+    .card-full h2 {
+        font-size: 1.2rem;
+    }
+
+    .card-full p {
+        font-size: 0.95rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+        min-height: auto;
+        text-align: left;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .card h2 {
+        font-size: 1.05rem;
+    }
+
+    .card p {
+        font-size: 0.85rem;
+    }
+
+    /* Profile page form */
+    .page-content .login-section {
+        max-width: 100%;
+        margin: 0;
+    }
+
+    .page-content .login-section .login-details {
+        gap: 1rem;
+    }
+
+    /* Back link - bigger touch target */
+    .back-link {
+        padding: 0.5rem 0;
+        font-size: 1rem;
+    }
+
+    /* Form link text */
+    .form-link {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* Error/success messages - better readability */
+    .error-message,
+    .success-message {
+        font-size: 0.95rem;
+        padding: 0.85rem 1rem;
+    }
+
+    /* Hamburger - bigger touch target */
+    .hamburger {
+        padding: 0.75rem;
+    }
+
+    /* Sidebar nav links - bigger touch targets */
+    .sidebar-nav a,
+    .sidebar .logout {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Prevent text size adjustment */
+    html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
 }

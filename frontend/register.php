@@ -18,27 +18,27 @@
 
             <div>
                 <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" placeholder="John Doe" required>
+                <input type="text" id="full_name" name="full_name" placeholder="John Doe" required autocomplete="name">
             </div>
 
             <div>
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                <input type="email" id="email" name="email" placeholder="john@example.com" required autocomplete="email" inputmode="email">
             </div>
 
             <div>
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="+254 700 000000" required>
+                <input type="tel" id="phone" name="phone" placeholder="+254 700 000000" required autocomplete="tel" inputmode="tel">
             </div>
 
             <div>
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required autocomplete="new-password" placeholder="Create a password">
             </div>
 
             <div>
                 <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password" placeholder="Confirm your password">
             </div>
 
             <button class="sign-in-button">Register</button>

@@ -18,12 +18,12 @@
 
             <div class="email">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com">
             </div>
 
             <div>
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
             </div>
 
             <button class="sign-in-button">Sign in</button>

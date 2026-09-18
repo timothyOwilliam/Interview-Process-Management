@@ -64,7 +64,8 @@ if ($session === false) {
     </header>
 
     <main class="page-content">
-        <a href="<?= APP_BASE ?>/<?=$_SESSION['user_role']?>" class="back-link">&larr; Back to Dashboard</a>
+        <!-- Below is the backlink to the dashboard, adds the role go back to the correct dashboard -->
+        <a href="<?= APP_BASE ?>/<?= $_SESSION['user_role']?>" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>Score Card</h1>
 
@@ -148,7 +149,7 @@ if ($session === false) {
                     <label for="team_fit">Team Fit (1–5)</label>
                     <input type="number" name="team_fit" id="team_fit" min="1" max="5" required placeholder="1 – 5">
 
-                    <button type="submit" class="sign-in-button">Submit Score</button>
+                    <button type="submit" class="score-card-button">Submit Score</button>
                 </form>
             </div>
 

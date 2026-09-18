@@ -35,6 +35,9 @@ $applicant_zoom_link = $session_details ? $session_details["zoom_link"] : "";
 
     <header class="topbar">
         <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <button class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <div class="dashboard-layout">
@@ -46,25 +49,27 @@ $applicant_zoom_link = $session_details ? $session_details["zoom_link"] : "";
             </nav>
             <a href="<?= APP_BASE ?>/login" class="logout">Logout</a>
         </aside>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
         <main class="dashboard-content">
             <h1>Welcome, <?=$_SESSION["user_name"]?></h1>
-<!-- View cards for the applicants  -->
-
 
             <div class="cards-grid">
                 <div class="card-full">
                     <h2>Join Session</h2>
                     <p><?=$applicant_zoom_link ? 'Your interview session is ready' : 'No active session at the moment' ?></p>
-                    <!-- if there is a session, the link will be embeded on th ejoin button, if none the button disables -->
-                    <a href=<?php echo htmlspecialchars($applicant_zoom_link); ?> target="blank">
-                        <button class="join-btn" <?php echo empty($applicant_zoom_link)? "disabled" : '';?> >Join</button>
-                    </a>
+                    <?php if (!empty($applicant_zoom_link)): ?>
+                        <a href="<?= htmlspecialchars($applicant_zoom_link) ?>" target="_blank" rel="noopener">
+                            <button class="join-btn">Join Now</button>
+                        </a>
+                    <?php else: ?>
+                        <button class="join-btn" disabled>Waiting for Session</button>
+                    <?php endif; ?>
                 </div>
 
                 <a href="<?= APP_BASE ?>/applicant/profile" class="card">
                     <h2>My Profile</h2>
-                    <p>View your personal information</p>
+                    <p>View and update your information</p>
                 </a>
 
                 <a href="<?= APP_BASE ?>/applicant/application-status" class="card">
@@ -75,5 +80,11 @@ $applicant_zoom_link = $session_details ? $session_details["zoom_link"] : "";
         </main>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

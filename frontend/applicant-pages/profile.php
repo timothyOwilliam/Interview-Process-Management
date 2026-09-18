@@ -84,17 +84,17 @@ if (isset($_GET['success'])) {
 
                 <div>
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" value="<?= $phone ?>" placeholder="+254 700 000000">
+                    <input type="tel" id="phone" name="phone" value="<?= $phone ?>" placeholder="+254 700 000000" inputmode="tel" autocomplete="tel">
                 </div>
 
                 <div>
                     <label for="resume_link">Resume Link</label>
-                    <input type="url" id="resume_link" name="resume_link" value="<?= $resume_link ?>" placeholder="https://drive.google.com/your-resume" >
+                    <input type="url" id="resume_link" name="resume_link" value="<?= $resume_link ?>" placeholder="https://drive.google.com/your-resume" inputmode="url" autocomplete="url">
                 </div>
 
                 <div>
                     <label for="position">Position Applied For</label>
-                    <input type="text" id="position" name="position" value="<?= $position ?>" placeholder="Software Developer">
+                    <input type="text" id="position" name="position" value="<?= $position ?>" placeholder="Software Developer" autocomplete="organization-title">
                 </div>
 
                 <button type="submit" class="sign-in-button">Update Profile</button>

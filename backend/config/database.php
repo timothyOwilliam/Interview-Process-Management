@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/env.php';
-loadEnv(__DIR__ . '/.env'); //Invoke the function in env.php and pass it the env file
+require_once __DIR__ . '/app.php';
+
+////if not local load the .env file
+if(!$isLocal){
+    loadEnv(__DIR__ . '/.env'); //Invoke the function in env.php and pass it the env file
+}
 
 //create a class for database, we wil use this class to start a database object for CRUD operations
 class Database {

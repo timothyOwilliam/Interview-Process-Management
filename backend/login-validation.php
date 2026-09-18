@@ -51,6 +51,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 case 'hr':
                     header("Location: " . APP_BASE . "/hr");
                     break;
+                case 'interviewer':
+                    header("Location: " . APP_BASE . "/interviewer");
+                    break;
                 default:
                     header("Location: " . APP_BASE . "/login?error=Unknown+role");
                     break;

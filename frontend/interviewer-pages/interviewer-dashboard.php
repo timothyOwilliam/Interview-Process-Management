@@ -120,7 +120,7 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="session-card">
                             <h2><?= htmlspecialchars($s['applicant_name']) ?></h2>
                             <div class="detail"><strong>Position:</strong> <?= htmlspecialchars($s['position'] ?: 'N/A') ?></div>
-                            <div class="detail"><strong>Date:</strong> <?= htmlspecialchars(date('M d, Y \a\g\h\i\s g:i A', strtotime($s['scheduled_date']))) ?></div>
+                            <div class="detail"><strong>Date:</strong> <?= htmlspecialchars(date('M d, Y \T\i\m\e\: g:i A', strtotime($s['scheduled_date']))) ?></div>
                             <div class="detail"><strong>Email:</strong> <?= htmlspecialchars($s['email']) ?></div>
                             <?php if (!empty($s['resume_link'])): ?>
                                 <div class="detail"><a href="<?= htmlspecialchars($s['resume_link']) ?>" target="_blank" style="color: #fff; text-decoration: underline;">View Resume</a></div>

@@ -13,9 +13,13 @@
 
     <header class="topbar">
         <img src="<?= APP_BASE ?>/frontend/assets/NCIA-Logo-2022.png" alt="NCIA logo" width="150" height="53">
+        <button class="hamburger" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
     <div class="dashboard-layout">
+        
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <a href="<?= APP_BASE ?>/ict" class="active">Dashboard</a>
@@ -23,23 +27,30 @@
             </nav>
             <a href="<?= APP_BASE ?>/login" class="logout">Logout</a>
         </aside>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
         <main class="dashboard-content">
             <h1>Welcome, <?=$_SESSION["user_name"]?></h1>
 <!-- Cards for accessing manage users and departments for ICT department -->
             <div class="cards-grid">
-                <a href="<?= APP_BASE ?>/ict/manage-users" class="card">
-                    <h2>Manage Users</h2>
-                    <p>Create, edit, or delete user accounts</p>
+                <a href="<?= APP_BASE ?>/manage-users" class="card">
+                    <h2>Manage Employees</h2>
+                    <p>Create, edit, or delete employees accounts</p>
                 </a>
 
-                <a href="<?= APP_BASE ?>/ict/departments" class="card">
-                    <h2>Departments</h2>
-                    <p>Manage departments and roles</p>
+                <a href="<?= APP_BASE ?>/manage-applicants" class="card">
+                    <h2>Manage Applicants</h2>
+                    <p>Delete and view all applicants</p>
                 </a>
             </div>
         </main>
     </div>
 
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+            document.querySelector('.sidebar-overlay').classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

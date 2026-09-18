@@ -31,20 +31,26 @@ $routePath = '/' . trim($routePath, '/'); //clean URL
 //Routing table
 
 $routes = [
-    '/'         =>'frontend/login.php',
-    '/login'    =>'frontend/login.php',
-    '/register' =>'frontend/register.php',
-    '/admin'    =>'frontend/admin-pages/admin-dashboard.php',
-    '/ict'      =>'frontend/ict-pages/ict-dashboard.php',
-    '/hr'       =>'frontend/hr-pages/hr-dashboard.php',
-    '/applicant'=>'frontend/applicant-pages/applicant-dashboard.php',
+    '/'                 =>'frontend/login.php',
+    '/login'            =>'frontend/login.php',
+    '/register'         =>'frontend/register.php',
+    '/admin'            =>'frontend/admin-pages/admin-dashboard.php',
+    '/ict'              =>'frontend/ict-pages/ict-dashboard.php',
+    '/hr'               =>'frontend/hr-pages/hr-dashboard.php',
+    '/interviewer'      =>'frontend/interviewer-pages/interviewer-dashboard.php',
+    '/applicant'        =>'frontend/applicant-pages/applicant-dashboard.php',
 
-    '/admin/create-session' => 'frontend/admin-pages/create-session.php',
+
+    '/create-session'       =>'frontend/create-session.php',
+    '/create-session'       =>'frontend/create-session.php',
     '/hr/sessions'          =>'frontend/sessions.php',
     '/reports'              =>'frontend/report.php',
     '/score-card'           =>'frontend/score-card.php',
     '/sessions'             =>'frontend/sessions.php',
     '/applicant/profile'    =>'frontend/applicant-pages/profile.php',
+    '/manage-employees'     =>'frontend/manage-employees.php',
+    '/manage-applicants'    =>'frontend/manage-applicants.php'
+    
 ];
 
 
@@ -66,7 +72,7 @@ if(!in_array($routePath, $publicRoutes)){
     $role = $_SESSION['user_role'] ?? '';
 
     if(strpos($routePath, '/admin') === 0 && $role !== 'admin') {
-        redirectTo('/login?error=Access+denied.+Admin+role+required.'); //Redirect back to login if not an admin role
+        redirectTo('/login?error=Access+denied.+Admin+role+required.' . $_SESSION["user_role"]); //Redirect back to login if not an admin role
     }
 
    if(strpos($routePath, '/hr') === 0 && $role !== 'hr') {
@@ -79,6 +85,9 @@ if(!in_array($routePath, $publicRoutes)){
 
     if(strpos($routePath, '/ict') === 0 && $role !== 'ict') {
         redirectTo('/login?error=Access+denied.+ICT+role+required.'); //Redirect back to login if not an ICT role
+    }
+    if(strpos($routePath, '/interviewer') === 0 && $role !== 'interviewer') {
+        redirectTo('/login?error=Access+denied.+interviewer+role+required.'); //Redirect back to login if not an ICT role
     }
 }
 

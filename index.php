@@ -42,7 +42,6 @@ $routes = [
 
 
     '/create-session'       =>'frontend/create-session.php',
-    '/create-session'       =>'frontend/create-session.php',
     '/hr/sessions'          =>'frontend/sessions.php',
     '/reports'              =>'frontend/report.php',
     '/score-card'           =>'frontend/score-card.php',

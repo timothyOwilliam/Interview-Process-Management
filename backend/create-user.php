@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':password', $hashed_password);
 
     if ($stmt->execute()) {
-        header("Location: " . APP_BASE . "/ict/manage-users?success=1");
+        header("Location: " . APP_BASE . "/manage-employees?success=1");
     } else {
-        header("Location: " . APP_BASE . "/ict/manage-users?action=add&error=Failed+to+create+user");
+        header("Location: " . APP_BASE . "/manage-employees?action=add&error=Failed+to+create+user");
     }
     exit();
 
 } else {
-    header("Location: " . APP_BASE . "/ict/manage-users");
+    header("Location: " . APP_BASE . "/manage-employees");
     exit();
 }
 ?>

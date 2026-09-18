@@ -33,7 +33,7 @@
             <h1>Welcome, <?=$_SESSION["user_name"]?></h1>
 <!-- Cards for accessing manage users and departments for ICT department -->
             <div class="cards-grid">
-                <a href="<?= APP_BASE ?>/manage-users" class="card">
+                <a href="<?= APP_BASE ?>/manage-employees" class="card">
                     <h2>Manage Employees</h2>
                     <p>Create, edit, or delete employees accounts</p>
                 </a>

@@ -44,7 +44,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
     <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
-    <title>Manage Users - ICT</title>
+    <title>Manage Employees</title>
 </head>
 <body>
 
@@ -58,7 +58,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="page-header">
             <h1>Employees</h1>
             <?php if ($action === 'list'): ?>
-                <a href="<?= APP_BASE ?>/ict/manage-users?action=add" class="export-btn">+ Add User</a>
+                <a href="<?= APP_BASE ?>/manage-employees?action=add" class="export-btn">+ Add User</a>
             <?php endif; ?>
         </div>
 
@@ -92,7 +92,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <option value="admin" <?= ($editUser['role'] ?? '') === 'admin' ? 'selected' : '' ?>>Admin</option>
                     <option value="ict" <?= ($editUser['role'] ?? '') === 'ict' ? 'selected' : '' ?>>ICT</option>
                     <option value="hr" <?= ($editUser['role'] ?? '') === 'hr' ? 'selected' : '' ?>>HR</option>
-                    <option value="hr" <?= ($editUser['role'] ?? '') === 'interviewer' ? 'selected' : '' ?>>Interviewer</option>
+                    <option value="interviewer" <?= ($editUser['role'] ?? '') === 'interviewer' ? 'selected' : '' ?>>Interviewer</option>
 
                 </select>
 
@@ -127,7 +127,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <td><?= htmlspecialchars($u['department'] ?? '—') ?></td>
                             <td><?= htmlspecialchars($u['role'] ?? '—') ?></td>
                             <td>
-                                <a href="<?= APP_BASE ?>/ict/manage-users?action=edit&id=<?= $u['id'] ?>" class="table-link">Edit</a>
+                                <a href="<?= APP_BASE ?>/manage-employees?action=edit&id=<?= $u['id'] ?>" class="table-link">Edit</a>
                                 &nbsp;|&nbsp;
                                 <a href="<?= APP_BASE ?>/backend/delete-user.php?id=<?= $u['id'] ?>" class="table-link" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                             </td>

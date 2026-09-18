@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password   = trim($_POST['password']);
 
     if (empty($name) || empty($email) || empty($department) || empty($role)) {
-        header("Location: " . APP_BASE . "/ict/manage-users?action=edit&id=" . $id . "&error=Please+fill+in+all+required+fields");
+        header("Location: " . APP_BASE . "/manage-employees?action=edit&id=" . $id . "&error=Please+fill+in+all+required+fields");
         exit();
     }
 
-    $allowedRoles = ['admin', 'ict', 'hr'];
+    $allowedRoles = ['admin', 'ict', 'hr','interviewer'];
     if (!in_array($role, $allowedRoles)) {
-        header("Location: " . APP_BASE . "/ict/manage-users?action=edit&id=" . $id . "&error=Invalid+role+selected");
+        header("Location: " . APP_BASE . "/manage-employees?action=edit&id=" . $id . "&error=Invalid+role+selected");
         exit();
     }
 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare("SELECT id FROM employees WHERE email = :email AND id != :id");
     $stmt->execute([':email' => $email, ':id' => $id]);
     if ($stmt->rowCount() > 0) {
-        header("Location: " . APP_BASE . "/ict/manage-users?action=edit&id=" . $id . "&error=Email+already+exists+for+another+user");
+        header("Location: " . APP_BASE . "/manage-employees?action=edit&id=" . $id . "&error=Email+already+exists+for+another+user");
         exit();
     }
 
@@ -50,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':role', $role);
 
     if ($stmt->execute()) {
-        header("Location: " . APP_BASE . "/ict/manage-users?success=1");
+        header("Location: " . APP_BASE . "/manage-employees?success=1");
     } else {
-        header("Location: " . APP_BASE . "/ict/manage-users?action=edit&id=" . $id . "&error=Failed+to+update+user");
+        header("Location: " . APP_BASE . "/manage-employees?action=edit&id=" . $id . "&error=Failed+to+update+user");
     }
     exit();
 
 } else {
-    header("Location: " . APP_BASE . "/ict/manage-users");
+    header("Location: " . APP_BASE . "/manage-employees");
     exit();
 }
 ?>

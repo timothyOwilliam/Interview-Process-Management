@@ -10,7 +10,7 @@ if (isset($_SESSION["errors"]) && !empty($_SESSION["errors"])) {
     unset($_SESSION["errors"]);
 } else {
     //get all of the applicants form the database to be used in displaying the applicants
-require_once __DIR__ . "/../../backend/config/database.php";
+require_once __DIR__ . "/../backend/config/database.php";
 
 //check if the response has an error or success and display it after the session is created or has an error
 if (isset($_GET['success'])) {
@@ -32,11 +32,14 @@ $stmt -> execute();
 //if there are applicants fetch all the values
 if ($stmt -> rowCount() > 0){
     $applicants = $stmt -> fetchAll(PDO::FETCH_ASSOC); //fetch all rows affected
-} else {
-    exit(); //TO DO : Write a code to display error messages.
 }
-
 //all rows are in the $applicants variable
+
+$stmt = $conn -> prepare("SELECT id AS interviewer_id, name AS interviewer_name FROM employees WHERE role = 'interviewer'");
+$stmt -> execute();
+
+$interviewers = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+
 }
 
 ?>
@@ -49,6 +52,7 @@ if ($stmt -> rowCount() > 0){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<?= APP_BASE ?>/frontend/style.css">
     <link rel="icon" href="<?= APP_BASE ?>/frontend/assets/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.css">
     <title>Create Session - Admin</title>
 </head>
 <body>
@@ -58,7 +62,7 @@ if ($stmt -> rowCount() > 0){
     </header>
 
     <main class="page-content">
-        <a href="<?= APP_BASE ?>/admin" class="back-link">&larr; Back to Dashboard</a>
+        <a href="<?= APP_BASE ?>/<?= $_SESSION['user_role']?>" class="back-link">&larr; Back to Dashboard</a>
 
         <h1>Create Interview Session</h1>
 
@@ -86,6 +90,15 @@ if ($stmt -> rowCount() > 0){
                         <?php endforeach;//ends the foreach loop, for displaying the names ?>
                 </select>
 
+                <label for="interviewers">Interviewers</label>
+                <select name="interviewer_id[]" id="interviewers" multiple placeholder="Select interviewers...">
+                    <?php foreach ($interviewers as $interviewer): ?>
+                        <option value="<?= $interviewer['interviewer_id'] ?>">
+                            <?= htmlspecialchars($interviewer['interviewer_name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
                 <label for="zoom_link">Zoom Link</label>
                 <input type="url" name="zoom_link" id="zoom_link" placeholder="https://zoom.us/j/..." required>
 
@@ -96,6 +109,14 @@ if ($stmt -> rowCount() > 0){
             </form>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        new TomSelect("#interviewers", {
+            maxItems: 5,
+            plugins: ['remove_button']
+        });
+    </script>
 
 </body>
 </html>

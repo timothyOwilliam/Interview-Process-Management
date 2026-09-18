@@ -91,5 +91,20 @@ CREATE TABLE `scores` (
   CONSTRAINT `scores_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `session_interviewers`
+--
+
+DROP TABLE IF EXISTS `session_interviewers`;
+CREATE TABLE `session_interviewers` (
+  `session_id` int(11) NOT NULL,
+  `interviewer_id` int(11) NOT NULL,
+  PRIMARY KEY (`session_id`,`interviewer_id`),
+  CONSTRAINT `si_session_fk` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `si_interviewer_fk` FOREIGN KEY (`interviewer_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;

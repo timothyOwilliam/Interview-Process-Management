@@ -12,6 +12,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     //1. Get the values entered from frontend create-session.php file
     $applicant_id = intval($_POST["applicant_id"]);//we'll get the applicant_id and use it to get the name and details of the applicant.
     $zoom_link = trim($_POST["zoom_link"]);
+    $interviewer_ids = $_POST['interviewer_id'] ?? [];
+
+    //Throw an error if there is no interviewer
+    
 
     //Process the date amd time
     $date_and_time = isset($_POST['date_and_time']) ? trim($_POST['date_and_time']) : ''; //if the value is a POST store it in the date_and_time variable else make it empty
@@ -60,19 +64,32 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         WHERE sessions.id = :session_id");
 
         $stmt->bindParam(':session_id', $session_id);//bind the placeholder with the session_id
-        $stmt-> execute(); 
+        $stmt-> execute();
 
         $applicant_details = $stmt->fetch(PDO::FETCH_ASSOC);//we get an assoc array of with the applicant details, contains applicant_id and applicant_name
 
         createRowForScoreSheet($session_id, $applicant_details["applicant_name"], $applicant_details["applicant_id"]); //Row initilization
 
-      
-        header("Location: " . APP_BASE . "/admin/create-session?success=1"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
+        //Insert the session_id into the session_interviewer table since this is where the row was already created
+        //Insert the session_id and interviewer_id into the session_interviewer table
+        if(!empty($interviewer_ids)) {
+            $stmt = $conn -> prepare("INSERT INTO session_interviewers (session_id, interviewer_id) VALUES (:session_id, :interviewer_id)");
+
+            foreach ($interviewer_ids as $interviewer_id){
+                $stmt -> execute([
+                    ':session_id'       => $session_id,
+                    ':interviewer_id'   => intval($interviewer_id)
+                ]);
+            }
+
+        }
+
+        header("Location: " . APP_BASE . "/create-session?success=1"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
 
 
 
     } else {
-        header("Location: " . APP_BASE . "/admin/create-session?error=Failed+to+create+session.+Try+again");
+        header("Location: " . APP_BASE . "/create-session?error=Failed+to+create+session.+Try+again");
         exit();
     }    
 

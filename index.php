@@ -41,14 +41,15 @@ $routes = [
     '/applicant'        =>'frontend/applicant-pages/applicant-dashboard.php',
 
 
-    '/create-session'       =>'frontend/create-session.php',
-    '/hr/sessions'          =>'frontend/sessions.php',
-    '/reports'              =>'frontend/report.php',
-    '/score-card'           =>'frontend/score-card.php',
-    '/sessions'             =>'frontend/sessions.php',
-    '/applicant/profile'    =>'frontend/applicant-pages/profile.php',
-    '/manage-employees'     =>'frontend/manage-employees.php',
-    '/manage-applicants'    =>'frontend/manage-applicants.php'
+    '/create-session'           =>'frontend/create-session.php',
+    '/hr/sessions'              =>'frontend/sessions.php',
+    '/reports'                  =>'frontend/report.php',
+    '/score-card'               =>'frontend/score-card.php',
+    '/sessions'                 =>'frontend/sessions.php',
+    '/applicant/profile'        =>'frontend/applicant-pages/profile.php',
+    '/applicant/application-status' =>'frontend/applicant-pages/application-status.php',
+    '/manage-employees'         =>'frontend/manage-employees.php',
+    '/hr/manage-applicants'     =>'frontend/hr-pages/manage-applicants.php'
     
 ];
 

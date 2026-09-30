@@ -35,7 +35,7 @@ if ($stmt -> rowCount() > 0){
 }
 //all rows are in the $applicants variable
 
-$stmt = $conn -> prepare("SELECT id AS interviewer_id, name AS interviewer_name FROM employees WHERE role = 'interviewer'");
+$stmt = $conn -> prepare("SELECT id AS interviewer_id, name AS interviewer_name FROM employees");
 $stmt -> execute();
 
 $interviewers = $stmt -> fetchAll(PDO::FETCH_ASSOC);

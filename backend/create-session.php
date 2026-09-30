@@ -4,6 +4,9 @@ session_start();
 
 require_once "config/app.php";
 require_once "config/database.php";
+require_once "config/email.php";
+require_once __DIR__ . '/emails/templates/interviewer_session_email.php';
+require_once __DIR__ .  '/emails/templates/applicant_session_email.php';
 
 //The session will be created and saved in the database
 
@@ -40,7 +43,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     //Get the name and other relevant details of the applicants
 
-    $stmt = $conn->prepare("SELECT name, resume_link FROM  applicants WHERE id =:id");
+    $stmt = $conn->prepare("SELECT name, email,  resume_link, position FROM  applicants WHERE id =:id");
     $stmt -> execute([':id' => $applicant_id]);//execute the statement
     $applicant = $stmt -> fetch(PDO::FETCH_ASSOC); //Get the row and values
 
@@ -84,9 +87,59 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         }
 
+
+        //Set email details of the applicant
+
+        $applicantEmailData = [
+            'applicant_name'    =>$applicant['name'],
+            'postion'           =>$applicant['position'],
+            'date_eat'          =>date('d M Y, H:i', strtotime($clean_date_and_time)) . 'EAT',
+            'zoom_link'         =>$zoom_link,
+            'login_url'         =>'http://localhost/Interview-Process-Management/login',
+            'support_email'     =>'hr@ncia.com' 
+        
+        ];
+
+        $content = buildApplicantSessionEmail($applicantEmailData); //Set the data to the template email
+
+        $mail-> Subject =$content['subject'];
+        $mail-> Body = $content['html'];
+        $mail-> AltBody = $content['alt'];
+        $mail-> addAddress($applicant['email'], $applicant['name']);
+
+        $mail-> send(); //Send the email to applicant
+
+
+        //Set details for interviewers and send email
+
+        foreach ($interviewer_ids as $interviewer_id){
+            //fetch email and name for each interviewer_id
+            $stmt = $conn-> prepare('SELECT name, email FROM employees WHERE id = :interviewer_id');
+            $stmt->bindParam(':interviewer_id', $interviewer_id);
+            $stmt-> execute();
+
+            $interviewer = $stmt->fetch(PDO::FETCH_ASSOC); //Store email and name in interviewer
+
+            $content = buildInterviewerSessionEmail([
+                'interviewer_name'      =>$interviewer['name'],
+                'applicant_name'        =>$applicant['name'],
+                'position'              =>$applicant['position'],
+                'date_eat'              =>date('d M Y, H:i', strtotime($clean_date_and_time)) . 'EAT',
+                'resume_link'           =>$applicant['resume_link'],
+                'dashboard_url'         =>' http://localhost/Interview-Process-Management/interviewer'
+            ]);
+
+            $mail-> Subject = $content['subject'];
+            $mail-> Body = $content['html'];
+            $mail-> AltBody = $content['alt'];
+            $mail-> addAddress($interviewer['email']);
+
+            $mail-> send(); //send email to interviewer
+            
+        }
+
+
         header("Location: " . APP_BASE . "/create-session?success=1"); //TODO: Create a toast or a simple confirmation showing it worked, on the frontend
-
-
 
     } else {
         header("Location: " . APP_BASE . "/create-session?error=Failed+to+create+session.+Try+again");

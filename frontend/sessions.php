@@ -15,6 +15,20 @@ $stmt = $conn->prepare("
 $stmt->execute(); //execute the statement
 $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query rows to be displayed.
 
+// Fetch assigned interviewers once, grouped per session: session_id => list of names.
+// Kept as a separate query so the main sessions query above stays untouched.
+$interviewerStmt = $conn->prepare("SELECT session_interviewers.session_id, employees.name AS interviewer_name
+                                   FROM session_interviewers
+                                   JOIN employees ON employees.id = session_interviewers.interviewer_id
+                                   ORDER BY employees.name");
+$interviewerStmt->execute(); //execute the statement
+$assignmentRows = $interviewerStmt->fetchAll(PDO::FETCH_ASSOC); //all (session, interviewer) pairs
+
+$interviewersBySession = [];
+foreach ($assignmentRows as $assignmentRow) {
+    $interviewersBySession[$assignmentRow['session_id']][] = $assignmentRow['interviewer_name'];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +60,7 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query 
                         <tr>
                             <th>Applicant</th>
                             <th>Position</th>
+                            <th>Interviewers</th>
                             <th>Resume</th>
                             <th>Scheduled Date</th>
                             <th>Action</th>
@@ -53,24 +68,28 @@ $sessions = $stmt->fetchAll(PDO::FETCH_ASSOC);//get all from teh previous query 
                     </thead>
                     <tbody>
                         <!-- List all of the rows from the database into the page in a table form, looping through each. -->
-                        <?php foreach ($sessions as $s)://s for 1 session row ?>
+                        <?php foreach ($sessions as $session)://one session row ?>
                             <tr>
-                                <td><?= htmlspecialchars($s['applicant_name']) ?></td>
-                                <td><?= htmlspecialchars($s['position']) ?></td>
+                                <td><?= htmlspecialchars($session['applicant_name']) ?></td>
+                                <td><?= htmlspecialchars($session['position']) ?></td>
+                                <td><?= htmlspecialchars(!empty($interviewersBySession[$session['id']]) ? implode(', ', $interviewersBySession[$session['id']]) : 'Not assigned') ?></td>
                                 <td>
-                                    <?php if (!empty($s['resume_link'])): ?>
-                                        <a href="<?= htmlspecialchars($s['resume_link']) ?>" target="_blank" class="table-link">View Resume</a>
+                                    <?php if (!empty($session['resume_link'])): ?>
+                                        <a href="<?= htmlspecialchars($session['resume_link']) ?>" target="_blank" class="table-link">View Resume</a>
                                     <?php else: ?>
                                         <span class="text-muted">N/A</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?= htmlspecialchars($s['scheduled_date']) ?></td>
+                                <td><?= htmlspecialchars($session['scheduled_date']) ?></td>
                                 <td>
-                                    <?php if (!empty($s['zoom_link']))://this just checks if there is a link attached, meaning the session is on ?>
-                                        <a href="<?= APP_BASE ?>/score-card?session_id=<?=$s['id'] ?>" class="join-btn">Join</a>
-                                    <?php else: ?>
-                                        <span class="text-muted">No link</span>
-                                    <?php endif; ?>
+
+                                        <?php if (!empty($session['zoom_link'])): //this just checks if there is a link attached, meaning the session is on ?>
+                                            <a href="<?= APP_BASE ?>/score-card?session_id=<?=$session['id'] ?>" class="join-btn">Join</a>
+                                        <?php else: ?>
+                                            <span class="text-muted">No link</span>
+                                        <?php endif; ?>
+                                    
+                            
                                 </td>
                             </tr>
                         <?php endforeach; ?>

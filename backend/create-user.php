@@ -50,6 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bindParam(':password', $hashed_password);
 
     if ($stmt->execute()) {
+        //Send an email to the user 
+        
+
         header("Location: " . APP_BASE . "/manage-employees?success=1");
     } else {
         header("Location: " . APP_BASE . "/manage-employees?action=add&error=Failed+to+create+user");

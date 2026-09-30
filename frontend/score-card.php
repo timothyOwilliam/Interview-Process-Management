@@ -46,6 +46,31 @@ if ($session === false) {
     exit();
 }
 
+//Only assigned interviewers may score. Applicants share the numeric id space
+//with employees, so they are rejected before any session_interviewers lookup.
+$viewer_role = $_SESSION['user_role'] ?? '';
+$viewer_id = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+
+if ($viewer_role === 'applicant') {
+    header("Location: " . APP_BASE . "/applicant?error=Only+assigned+interviewers+can+score");
+    exit();
+}
+
+$isAssigned = false;
+$alreadyScored = false;
+
+if ($viewer_id > 0) {
+    $stmt = $conn->prepare("SELECT 1 FROM session_interviewers WHERE session_id = :session_id AND interviewer_id = :interviewer_id");
+    $stmt->execute([':session_id' => $session_id, ':interviewer_id' => $viewer_id]);
+    $isAssigned = $stmt->fetchColumn() !== false;
+
+    if ($isAssigned) {
+        $stmt = $conn->prepare("SELECT 1 FROM score_submissions WHERE session_id = :session_id AND scorer_id = :scorer_id");
+        $stmt->execute([':session_id' => $session_id, ':scorer_id' => $viewer_id]);
+        $alreadyScored = $stmt->fetchColumn() !== false;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -128,7 +153,12 @@ if ($session === false) {
                 </table>
             </div>
 
-            <!-- Scoring Form -->
+            <!-- Scoring Form: shown only to assigned interviewers who have not scored yet -->
+            <?php if (!$isAssigned): ?>
+                <p class="empty-state">You are not assigned to this session, so you cannot score it.</p>
+            <?php elseif ($alreadyScored): ?>
+                <p class="empty-state">You have already scored this session.</p>
+            <?php else: ?>
             <div class="login-section" style="margin-top: 2rem;">
                 <form action="<?= APP_BASE ?>/backend/submit-score.php" method="POST" class="login-details">
                     <input type="hidden" name="session_id" value="<?= $session['session_id'] ?>">
@@ -152,6 +182,7 @@ if ($session === false) {
                     <button type="submit" class="score-card-button">Submit Score</button>
                 </form>
             </div>
+            <?php endif; ?>
 
     </main>
 

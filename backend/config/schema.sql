@@ -22,6 +22,7 @@ CREATE TABLE `applicants` (
   `password` varchar(255) NOT NULL,
   `resume_link` varchar(255) DEFAULT NULL,
   `position` varchar(150) DEFAULT NULL,
+  `application_status` ENUM('pending','shortlisted','rejected') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
@@ -104,6 +105,22 @@ CREATE TABLE `session_interviewers` (
   PRIMARY KEY (`session_id`,`interviewer_id`),
   CONSTRAINT `si_session_fk` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,
   CONSTRAINT `si_interviewer_fk` FOREIGN KEY (`interviewer_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `score_submissions`
+-- One row per interviewer per session: proves who scored and blocks duplicates
+--
+
+DROP TABLE IF EXISTS `score_submissions`;
+CREATE TABLE `score_submissions` (
+  `session_id` int(11) NOT NULL,
+  `scorer_id` int(11) NOT NULL,
+  `submitted_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`session_id`,`scorer_id`),
+  CONSTRAINT `ss_session_fk` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `ss_scorer_fk` FOREIGN KEY (`scorer_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;

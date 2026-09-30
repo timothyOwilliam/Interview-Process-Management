@@ -1,4 +1,12 @@
 <?php
+require_once __DIR__ . '/env.php';
+
+// Load .env unconditionally so DB + SMTP + app-URL settings are in $_ENV
+// for every script that includes app.php — local and production alike.
+// (loadEnv silently does nothing when the file is absent, so local setups
+// without a .env still fall back to the defaults in database.php / email.php.)
+loadEnv(__DIR__ . '/.env');
+
 // Auto-detects the project base URL based on environment.
 // On localhost (XAMPP) → /Interview-Process-Management
 // On production (InfinityFree, etc.) → '' (empty, files at root)
